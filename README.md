@@ -1,2 +1,14 @@
-# Primeros_pasos_R_2021
-Curso de primeros pasos con R, dictada en noviembre del 2021
+# Primeros pasos con R
+
+En este repositorio podrá encontrar la información vista en clases en el curso de primeros pasos con R.
+
+## Clase 1
+
+- Introducción
+- Panel grafico
+- Ejemplos
+- Primer código
+- Paquetes en R
+- Calculos númericos
+
+
