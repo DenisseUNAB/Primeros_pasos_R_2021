@@ -59,7 +59,6 @@ Tabla2 <- tibble(ID = 1:100,
 
 # Importar y exportar bases de datos ----
 
-
 library(readxl)
 library(data.table)
 
@@ -105,3 +104,80 @@ Tabla1 %>% glimpse()
 
 skimr::skim(Tabla3)
 
+file.choose()
+Tabla4 <- readxl::read_excel("C:\\Users\\diego\\Desktop\\Proyectos\\Primeros pasos con R - Nov 2021\\Clase 3\\viviendasRM - copia.xlsx",
+                             skip = 4, na = "*****")
+
+Tabla4
+
+# na_if transforma información a NA
+na_if(Tabla4$Tipo_Vivienda,"Casa")
+  
+
+
+# ACTIVIDAD ----
+file.choose()
+datos <- readxl::read_excel("C:\\Users\\diego\\Desktop\\Proyectos\\Primeros pasos con R - Nov 2021\\Clase 3\\viviendasRM.xlsx")
+
+# a. ----
+# Importar base de datos y corrobore su clase (¿es tibble o data frame?)
+
+str(datos)
+glimpse(datos)
+
+# R: Es de clase tibble
+
+# b. ----
+# Si su base fue importada como DF, convierta a tibble
+
+datos <- as.data.frame(datos)
+datos %>% str()
+
+# Transformar a tibble
+datos <- as_tibble(datos)
+
+# c. ----
+# Realice un pequeño análisis exploratorio de la base
+
+datos %>% 
+  summary()
+
+datos %>% 
+  skimr::skim()
+
+# d. ----
+# Rescate la información contenida en el cuarto registro
+
+datos[4,]
+datos %>% slice(4)
+
+# Obetener la fila 4 y 10, con las columnas Comuna y Tipo_Vivienda
+
+# opción 1
+datos[c(4,10),c("Comuna","Tipo_Vivienda")]
+# opción 2
+datos %>% slice(4,10) %>% select(Comuna,Tipo_Vivienda)
+
+# e ----
+# Compare los resultados obtenidos con glimpse y str
+
+datos %>% str()
+datos %>% glimpse()
+
+
+
+
+
+
+datos %>% slice(4,10) %>% select(Comuna,Tipo_Vivienda)
+
+# datos %>% slice(4,10) = slice(datos,4,10)
+
+datos %>% slice(4,10) %>% select(Comuna,Tipo_Vivienda)
+
+
+select(slice(datos,4,10),Comuna,Tipo_Vivienda)
+
+datos %>% 
+  slice(4,10) %>% 
+  select(Comuna,Tipo_Vivienda)
