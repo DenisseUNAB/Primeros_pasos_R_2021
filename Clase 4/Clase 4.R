@@ -67,6 +67,32 @@ df %>%
   mutate(proyecto = str_replace_all(proyecto,"aeropuerto","tren")) %>% 
   View()
 
+# Fechas ============
+
+'18-11-2021' %>% 
+  as.Date(format = "%d-%m-%Y") %>% 
+  format("%d %B, %Y")
+
+
+df %>% glimpse()
+df %>% str()
+
+df %>% 
+  mutate(fecha_entrada = format(fecha_entrada,"%d %B - %Y")) %>% 
+  View()
+
+Sys.Date() %>% format("%A %d %B, %Y")
+
+## Paque lubridate
+library(lubridate)
+
+Sys.Date() %>% format("%d %B, %Y")
+
+
+"18 noviembre, 2021" %>% as.Date("%d %B, %Y")
+"18 noviembre, 2021" %>% dmy() %>% week()
+
+# Paquete Skimr
 
 
 
