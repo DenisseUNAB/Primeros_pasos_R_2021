@@ -26,3 +26,21 @@ Link clase (solo cambiar el número de la clase): https://diegoholiwis.github.io
 - Tibble
 - Operadores lógicos
 - Taller práctico
+
+## Clase 3
+
+- Dataframe: Manipulación de DF y creación de DF
+- Tibble: ventajas y creación de un tibble
+- Importación y exportación de datos
+- Análisis exploratorio de datos
+- Problemas en la importación de datos
+
+## Clase 4
+
+- Paquete janitor
+- Paquete stringr
+- Fechas
+- Paquete lubridate
+- Paquete skim
+- Paquete naniar
+- Factores
