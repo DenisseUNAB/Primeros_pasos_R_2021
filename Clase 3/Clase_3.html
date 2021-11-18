@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Curso Primeros Pasos en R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Profesor: Diego Muñoz Ureta" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/rladies-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: left, bottom
+background-image: url(media/ds6.jpg)
+background-size: cover
+
+.left[&lt;img src="media/logo.png" style="width: 40%" /&gt;]
+
+&lt;br&gt;
+&lt;br&gt;
+
+# **Curso Primeros Pasos en R**
+----
+## Clase 3: Manipulación e importación de datos
+### Profesor: Diego Muñoz Ureta
+#### Pontificia Universidad Católica de Chile
+###### Noviembre 2021
+&lt;br&gt;
+&lt;br&gt;
+---
+class: left, middle
+
+# Clase 3: Manipulación e importación de datos
+
+----
+.pull-left[
+.left[
+
+]
+
+* [**Dataframe: Manipulación de DF y creación de DF**](#DF)
+
+* [**Tibble: ventajas y creación de un tibble**](#Tibble)
+
+* [**Importación y exportación de datoss**](#Importación)
+
+] 
+
+.pull-right[
+.left[
+
+]
+
+* [**Análisis exploratorio de datos**](#Análisis)
+
+* [**Problemas en la importación de datos**](#Problemas)
+
+* [**Actividad**](#Actividad)
+
+
+] 
+
+
+---
+name: DF
+# Data frames y tibble
+
+&lt;p&gt;En el curso trabajaremos principalmente con bases de datos ordenadas:&lt;/p&gt;
+.center[&lt;img src='media/dftibble.png' width='600px'&gt;]
+
+&lt;p&gt;Cuando carguemos bases de datos en R, estas pueden ser de dos tipos: &lt;code class='bold'&gt;data frame&lt;/code&gt; o &lt;code class='bold'&gt;tibble&lt;/code&gt;.
+
+Las funciones &lt;code class='bold'&gt;tibble()&lt;/code&gt; y &lt;code class='bold'&gt;as_tibble()&lt;/code&gt; del paquete &lt;code&gt;tibble&lt;/code&gt; nos permiten crear este tipo de objetos y transformar un data frame a este formato. 
+
+---
+class: inverse, middle, center
+
+# Data frame
+
+---
+
+name: DF
+# Creación de DF
+
+&lt;p&gt;Los data frame en R se pueden generar directamente con el comando &lt;code class='bold'&gt;data.frame()&lt;/code&gt; o se pueden transformar otras estructuras definidas. Por ejemplo, una matriz, con el comando &lt;code class='bold'&gt;as.data.frame()&lt;/code&gt;&lt;/p&gt;
+
+### Forma 1
+
+```r
+DF1 &lt;- data.frame(ID = 1:100,
+                 Numero = rnorm(100),
+                 Sexo = rbinom(100, 1, 0.4))
+
+head(DF1)
+```
+
+```
+##   ID      Numero Sexo
+## 1  1 -0.81703224    0
+## 2  2 -0.64072176    0
+## 3  3  0.76330663    0
+## 4  4 -0.02254978    1
+## 5  5  0.31928365    1
+## 6  6  0.07727245    1
+```
+
+---
+name: DF
+# Creación de DF
+
+### Forma 2
+
+
+```r
+ID &lt;-  1:100
+Numero &lt;-  rnorm(100)
+Sexo &lt;-  rbinom(100, 1, 0.4)
+
+Matriz &lt;- cbind(ID, Numero, Sexo)
+class(Matriz)
+```
+
+```
+## [1] "matrix" "array"
+```
+
+```r
+### Convertimos la matriz en DF
+DF2 &lt;- as.data.frame(Matriz)
+class(DF2)
+```
+
+```
+## [1] "data.frame"
+```
+---
+name: DF
+# Manipulación de DF
+
+Una vez cargada la base de datos, se pueden ralizar en ella, diversas operaciones:
+
+- `head(data, k)`
+- `tail(data, k)`
+- `dim(data)`
+- `length(data)`
+- `names(data)`
+- `attach(data)` (no recomendado)
+- `Operador "$"`
+
+---
+
+# Taller práctico 
+
+Utilice las operaciones anteriores en la base de datos `paises` de la librería `datos`.
+
+- Se crea el DF
+
+
+```r
+# install.packages("datos")
+
+library(datos)
+```
+
+```
+## Warning: package 'datos' was built under R version 4.1.1
+```
+
+```r
+datos &lt;- datos::paises  
+```
+
+- Se visualiza los primeros 3 valores del DF
+
+
+```r
+head(datos, 3)
+```
+
+```
+## # A tibble: 3 x 6
+##   pais       continente  anio esperanza_de_vida poblacion pib_per_capita
+##   &lt;fct&gt;      &lt;fct&gt;      &lt;int&gt;             &lt;dbl&gt;     &lt;int&gt;          &lt;dbl&gt;
+## 1 Afganistán Asia        1952              28.8   8425333           779.
+## 2 Afganistán Asia        1957              30.3   9240934           821.
+## 3 Afganistán Asia        1962              32.0  10267083           853.
+```
+
+---
+
+# Taller práctico 
+
+- Se visualizan los últimos 3 valores del DF
+
+
+```r
+tail(datos, 3)
+```
+
+```
+## # A tibble: 3 x 6
+##   pais     continente  anio esperanza_de_vida poblacion pib_per_capita
+##   &lt;fct&gt;    &lt;fct&gt;      &lt;int&gt;             &lt;dbl&gt;     &lt;int&gt;          &lt;dbl&gt;
+## 1 Zimbabue África      1997              46.8  11404948           792.
+## 2 Zimbabue África      2002              40.0  11926563           672.
+## 3 Zimbabue África      2007              43.5  12311143           470.
+```
+
+- ¿Cuántas observaciones y variables tiene el DF?
+
+
+```r
+dim(datos)
+```
+
+```
+## [1] 1704    6
+```
+
+Recuerde que la primera posición representa el número de observaciones y la segunda posición el número de variables.
+
+---
+# Taller práctico 
+
+- ¿Cuántos elementos tiene el DF?
+
+
+```r
+length(datos)
+```
+
+```
+## [1] 6
+```
+
+- ¿Cuáles son los nombres de las variables del DF?
+
+
+```r
+names(datos)
+```
+
+```
+## [1] "pais"              "continente"        "anio"             
+## [4] "esperanza_de_vida" "poblacion"         "pib_per_capita"
+```
+
+- ¿Cómo rescatamos una variable en particular?
+
+
+```r
+head(datos$anio, 15)
+```
+
+```
+##  [1] 1952 1957 1962 1967 1972 1977 1982 1987 1992 1997 2002 2007 1952 1957 1962
+```
+
+---
+class: inverse, middle, center
+
+# Tibble
+
+
+---
+name: Tibble
+# Creación de un tibble
+
+Recordando la clase pasada, los tibble se definen de la misma forma que un data frame. Volviendo al ejemplo anterior:
+
+
+```r
+library(tibble)
+
+tibble_DF1 &lt;- tibble(ID = 1:100,
+                     Numero = rnorm(100),
+                     Sexo = rbinom(100, 1, 0.4))
+
+
+tibble_DF1
+```
+
+```
+## # A tibble: 100 x 3
+##       ID Numero  Sexo
+##    &lt;int&gt;  &lt;dbl&gt; &lt;int&gt;
+##  1     1  2.04      1
+##  2     2  0.314     1
+##  3     3  0.382     0
+##  4     4  0.774     0
+##  5     5 -0.145     0
+##  6     6 -0.241     1
+##  7     7 -0.155     0
+##  8     8 -1.09      1
+##  9     9  1.51      0
+## 10    10  1.91      0
+## # ... with 90 more rows
+```
+
+---
+
+# Comparar DF y tibble
+
+.pull-left[
+
+```r
+head(DF1, 3) 
+```
+
+```
+##   ID     Numero Sexo
+## 1  1 -0.8170322    0
+## 2  2 -0.6407218    0
+## 3  3  0.7633066    0
+```
+
+
+```r
+head(DF1$Num, 3)
+```
+
+```
+## [1] -0.8170322 -0.6407218  0.7633066
+```
+DF no es sensible a la completación de los nombres de las variables.
+]
+
+.pull-right[
+
+
+```r
+head(tibble_DF1, 3)
+```
+
+```
+## # A tibble: 3 x 3
+##      ID Numero  Sexo
+##   &lt;int&gt;  &lt;dbl&gt; &lt;int&gt;
+## 1     1  2.04      1
+## 2     2  0.314     1
+## 3     3  0.382     0
+```
+
+```r
+tibble_DF1$Num
+```
+
+```
+## Warning: Unknown or uninitialised column: `Num`.
+```
+
+```
+## NULL
+```
+
+En cambio tibble si es sensible a la completación de los nombres de las variables (es menos riesgoso).
+]
+
+
+---
+class: inverse, middle, center
+
+# Importación y exportación de datos
+
+---
+name: Importación
+## Importación y exportación de datos
+
+&lt;p&gt;La importación de una base de datos dependerá básicamente del formato del archivo. Para ello, existen diferentes funciones que permiten llevar a cabo tal procedimiento: &lt;/p&gt;
+
+&lt;b&gt;Importar archivos &lt;code&gt;txt&lt;/code&gt;&lt;/b&gt;
+
+
+```r
+read.table("&lt;Ruta del archivo&gt;", header = TRUE, ... )
+readr::read_csv("&lt;Ruta del archivo&gt;", col_names = TRUE,...)
+```
+
+&lt;b&gt;Importar archivos &lt;code&gt;csv&lt;/code&gt;&lt;/b&gt;
+Dependiendo de cómo esté codificado el archivo csv, hay distintas funciones para importar:
+
+- **`read_csv`** : Si los decimales están con puntos y las variables se separan por comas.
+- **`read_csv2`**: Si los decimales están con comas y las variables se separan por punto y coma (;).
+
+
+```r
+readr::read_csv("&lt;Ruta del archivo&gt;", col_names = TRUE, ...)
+readr::read_csv2("&lt;Ruta del archivo&gt;", col_names = TRUE, ...)
+```
+
+---
+name: xl
+### Importación de datos
+
+
+&lt;b&gt;Importar archivos &lt;code&gt;excel&lt;/code&gt;&lt;/b&gt;
+
+La librería &lt;code class="bold"&gt;readxl&lt;/code&gt; tiene múltiples funciones para cargar archivos en formato excel. Un argumento importante de estas funciones es **`sheet`**, en donde se puede indicar cuál hoja se importará. Sus principales funciones son:
+
+
+```r
+readxl::read_excel("&lt;Ruta del archivo&gt;", col_names = TRUE, ...)
+readxl::read_xls()
+readxl::read_xlsx()
+```
+
+&lt;b&gt;Importar múltiples tipos de archivos&lt;/b&gt;
+
+
+El paquete &lt;code&gt;haven&lt;/code&gt; contiene multiples funciones para importar archivos de SPSS, STATA y SAS con funciones, tales como: &lt;code class='bold'&gt;read_sas()&lt;/code&gt;, &lt;code class='bold'&gt;read_por()&lt;/code&gt;, &lt;code class='bold'&gt;read_sav()&lt;/code&gt; y &lt;code class='bold'&gt;read_dta()&lt;/code&gt;
+
+El paquete &lt;code&gt;rio&lt;/code&gt; y su función &lt;code class="bold"&gt;import&lt;/code&gt; permiten importar numerosos tipos de archivo de formato, incluyendo Excel, SAS, SPSS, STATA, Minitab, Matlab, JSON, etc. Es recomendable su uso si la base a cargar es limpia y no tiene problemas de importación.
+
+
+```r
+rio::import("&lt;Ruta del archivo&gt;")
+```
+
+---
+class: inverse, middle, center
+# Análisis exploratorio
+
+---
+#### Análisis exploratorio
+
+Las principales funciones para realizar los primeros pasos de un análisis de datos exploratorio, son las siguientes:
+
+
+```r
+dplyr::glimpse(DF1)
+```
+
+```
+## Rows: 100
+## Columns: 3
+## $ ID     &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, ~
+## $ Numero &lt;dbl&gt; -0.81703224, -0.64072176, 0.76330663, -0.02254978, 0.31928365, ~
+## $ Sexo   &lt;int&gt; 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, ~
+```
+
+```r
+str(DF1)
+```
+
+```
+## 'data.frame':	100 obs. of  3 variables:
+##  $ ID    : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ Numero: num  -0.817 -0.6407 0.7633 -0.0225 0.3193 ...
+##  $ Sexo  : int  0 0 0 1 1 1 1 0 1 0 ...
+```
+
+```r
+summary(DF1)
+```
+
+```
+##        ID             Numero             Sexo     
+##  Min.   :  1.00   Min.   :-2.9586   Min.   :0.00  
+##  1st Qu.: 25.75   1st Qu.:-0.8420   1st Qu.:0.00  
+##  Median : 50.50   Median :-0.1147   Median :0.00  
+##  Mean   : 50.50   Mean   :-0.1442   Mean   :0.44  
+##  3rd Qu.: 75.25   3rd Qu.: 0.4358   3rd Qu.:1.00  
+##  Max.   :100.00   Max.   : 4.3836   Max.   :1.00
+```
+
+---
+
+
+```r
+skimr::skim(DF1)
+```
+
+
+Table: Data summary
+
+|                         |     |
+|:------------------------|:----|
+|Name                     |DF1  |
+|Number of rows           |100  |
+|Number of columns        |3    |
+|_______________________  |     |
+|Column type frequency:   |     |
+|numeric                  |3    |
+|________________________ |     |
+|Group variables          |None |
+
+
+**Variable type: numeric**
+
+|skim_variable | n_missing| complete_rate|  mean|    sd|    p0|   p25|   p50|   p75|   p100|hist                                     |
+|:-------------|---------:|-------------:|-----:|-----:|-----:|-----:|-----:|-----:|------:|:----------------------------------------|
+|ID            |         0|             1| 50.50| 29.01|  1.00| 25.75| 50.50| 75.25| 100.00|▇▇▇▇▇ |
+|Numero        |         0|             1| -0.14|  1.15| -2.96| -0.84| -0.11|  0.44|   4.38|▂▇▇▁▁ |
+|Sexo          |         0|             1|  0.44|  0.50|  0.00|  0.00|  0.00|  1.00|   1.00|▇▁▁▁▆ |
+
+
+---
+
+class: inverse, middle, center
+# Problemas en la importación
+
+---
+
+class: deli
+### Problemas en la importación de datos
+
+.large[**Delimitadores**]
+
+Algunas veces las observaciones de las bases de datos están separadas por distintos delimitadores. Esto puede configurarse para realizar correctamente la lectura de los datos en las distintas funciones de importación:
+
+
+```r
+read.table(..., sep = "&lt;delimitador&gt;")
+readr::read_csv(..., sep = "&lt;delimitador&gt;")
+```
+
+.large[**Saltos de fila**]
+
+&lt;p&gt;El argumento &lt;code class='bold'&gt;skip&lt;/code&gt; presente en la mayoría de las funciones para cargar datos, permite saltarse un número de filas de observaciones para realizar la lectura de datos. Esto sirve para cargar archivos en donde la base de datos no empieza desde la primera fila.&lt;/p&gt;
+
+
+
+```r
+readr::read_csv(...,skip = n)
+readxl::read_excel(...,skip = n)
+```
+
+
+---
+class: NA
+
+
+.large[
+&lt;p&gt;&lt;b&gt;Codificación de datos faltantes (NA)&lt;/b&gt;&lt;/p&gt;
+]
+
+Es común que en las bases de datos, especialmente en las encuestas, exista una codificación de valores faltantes distinto a una celda vacía (por ejemplo, *, 88 o 99). Dependiendo de cómo se importen los datos, estos puede recodificarse de distintas formas.
+
+&lt;b&gt;Directamente al importar&lt;/b&gt;
+
+Algunas funciones de importación tienen argumentos que permiten codificar observaciones como NA dado un vector de referencia:
+
+
+```r
+readr::read_csv("archivo", na = vector, ... )
+readxl::read_excel("archivo", na = vector, ... )
+```
+
+&lt;b&gt;Después de importar&lt;/b&gt;
+
+Uno puede usar distintas herramientas para recodificar elementos como NA. A continuación se presentan dos formas equivalentes, usando R base y &lt;code&gt;dplyr&lt;/code&gt; respectivamente.
+
+
+```r
+nombre_base[ nombre_base %in% vector ] &lt;- NA
+
+nombre_base %&gt;% dplyr::na_if(vector)
+```
+
+---
+.large[
+&lt;b&gt;Observaciones agrupadas&lt;/b&gt;
+]
+
+.pull-left[
+Algunas bases de datos contienen filas agrupadas. Esto es problemático dado que solo se cargará información a la primera celda contenida en esta agrupación. Es decir:
+
+|Mes | Sucursal | ... |
+| ----- | ----- | ----- |
+| ENERO | A | ... |
+| `NA` | B| ... |
+| `NA` | C|... |
+&lt;/br&gt;
+]
+
+.pull-right[
+&lt;img src="media/foto_agrupado.png"&gt;
+]
+
+Si el documento es un Excel, esto se puede solucionar usando el argumento &lt;code class="bold"&gt;fillMergedCells = TRUE&lt;/code&gt; al cargar el archivo usando el comando &lt;code class:"bold"&gt;openxlsx::read.xlsx()&lt;/code&gt;. 
+
+Si el archivo ya está cargado, el comando &lt;code class="bold"&gt;tidyr::fill&lt;/code&gt; permite llenar bases de datos con variables incompletas de muchas formas, gracias a su argumento &lt;code&gt;direction&lt;/code&gt;.
+
+---
+
+class: inverse, middle, center
+
+# Actividad
+
+---
+
+name: actividad
+
+### Actividad
+
+&lt;p&gt;La base de datos &lt;code&gt;viviendasRM.xlsx&lt;/code&gt; contiene avisos de viviendas usadas que se venden en la Región Metropolitana de Chile recolectados de &lt;a href="http://www.chilepropiedades.cl/"&gt;Chile Propiedades&lt;/a&gt; en mayo 2020. La base de datos contiene 1139 observaciones de 13 variables (una descripción de esta base se encuentra en la siguiente slide). &lt;b&gt;Fuente:&lt;/b&gt; &lt;a href="https://www.kaggle.com/gorkigonzalez/casas-usadas-rm-chile-mayo-2020"&gt;Kaggle&lt;/a&gt;.&lt;/p&gt;
+---
+name: actividad
+
+&lt;b&gt;Descripción de la base de datos: &lt;/b&gt;
+
+| Variable | Descripción |
+| -------- | ----------- |
+| Comuna | Comuna de la región en la cual se encuentra la casa.| 
+| Link | Enlace al aviso de la vivienda.|
+| Tipo_Vivienda | Tipo de vivienda. |
+| N_Habitaciones | Número de habitaciones. |
+| N_Banos | Número de baños. |
+| N_Estacionamientos | Número de estacionamientos. |
+| Total_Superficie_M2 | Total de superficie en mt2. |
+| Superficie_Construida_M2 | Superficie construida en mt2: metros de la construcción habitable.|
+| Valor_UF | Valor en Unidades de fomentos de la propiedad declarado en el portal.|
+| Valor_CLP | Valor en pesos chilenos. |
+| Direccion | Dirección de la casa del aviso. |
+| Quien_Vende |  Nombre de la persona que vende la vivienda. |      
+| Corredor | Indica nombre de la empresa que vende. |
+---
+name: actividad
+### Actividad
+
+####  Utilizando los contenidos abarcados en la clase 2 y 3, realice las siguientes actividades:
+&lt;ol type="a"&gt;
+&lt;li&gt; Importar base de datos y corrobore su clase (¿es tibble o data frame?) &lt;/li&gt;
+&lt;br&gt;
+&lt;li&gt; Si su base fue importada como DF, convierta a tibble &lt;/li&gt;
+&lt;br&gt;
+&lt;li&gt; Realice un pequeño análisis exploratorio de la base &lt;/li&gt;
+&lt;br&gt;
+&lt;li&gt; Rescate la información contenida en el cuarto registro &lt;/li&gt;
+&lt;br&gt;
+&lt;li&gt; Compare los resultados obtenidos con glimpse y str &lt;/li&gt;
+
+
+---
+class: inverse, center, middle
+
+
+# ¡Gracias!
+&lt;br&gt;
+&lt;br&gt;
+
+Diego Muñoz Ureta
+&lt;br&gt; 
+[**dimunoz1@uc.cl**](dimunoz1@uc.cl) 
+
+&lt;br&gt; 
+&lt;br&gt; 
+Felipe Moya
+&lt;br&gt; 
+[**felipe.moya@uc.cl**](felipe.moya@uc.cl) 
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "4:3"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
