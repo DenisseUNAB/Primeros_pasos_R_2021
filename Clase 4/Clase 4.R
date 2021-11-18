@@ -10,4 +10,63 @@
 library(tidyverse)
 library(skimr)
 library(naniar)
+library(janitor)
+
+
+Tabla1 <- tibble(`Nombre de variable` = 1:100,
+                 hola = 1:100)
+
+Tabla1 <- tibble(Nombre_variable = 1:100,
+                 hola = 1:100)
+
+
+file.choose()
+df <- readxl::read_excel("G:\\Mi unidad\\Diplomado\\Bases de datos\\Encuesta nacional de salud.xlsx")
+
+df %>% 
+  clean_names() %>% 
+  View()
+
+# Paquete string ====================
+
+df <- readxl::read_excel("SEA_projects.xlsx",skip = 2)
+
+df$proyecto %>% str_detect("Aeropuerto")
+
+df_aeropuerto <- df %>% 
+  filter(proyecto %>% str_detect("Aeropuerto"))
+
+df %>% 
+  filter(proyecto %>% str_detect("Personas"))
+
+df <- df %>% 
+  mutate(proyecto = str_to_lower(proyecto)) 
+
+df %>% 
+  filter(proyecto %>% str_detect("aeropuerto"))
+
+
+str_extract("Kia morning 2021","[:digit:]")
+str_extract_all("Kia morning 2021","[:digit:]")
+
+
+str_remove_all("Kia morning 2021"," ")
+str_remove_all("Feliz día del niño","ñ")
+
+str_remove_all("Kia morning 2021","[:digit:]")
+
+
+str_replace("Kia morning 2021","Kia","Kia Motor")
+
+str_replace_all("El día del niño, lo celebramos en Nuñoa","ñ","n")
+
+openxlsx::write.xlsx(df,file = "Base de prueba.xlsx")
+
+
+df %>% 
+  mutate(proyecto = str_replace_all(proyecto,"aeropuerto","tren")) %>% 
+  View()
+
+
+
 
