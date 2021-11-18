@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Curso Primeros Pasos en R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Profesor: Diego Muñoz" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/rladies-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: left, bottom
+background-image: url(media/ds6.jpg)
+background-size: cover
+
+.left[&lt;img src="media/logo.png" style="width: 40%" /&gt;]
+
+&lt;br&gt;
+&lt;br&gt;
+
+
+# **Curso Primeros Pasos en R**
+
+----
+## Clase 4: Manipulación y otras estructuras de datos
+### Profesor: Diego Muñoz
+#### Pontificia Universidad Católica de Chile
+###### Noviembre 2021
+&lt;br&gt;
+&lt;br&gt;
+
+---
+class: left, middle
+
+# Clase 4: Manipulación y otras estructuras de datos
+
+----
+.pull-left[
+.left[
+
+]
+
+* [**Paquete janitor**](#janitor)
+
+* [**Paquete stringr**](#stringr)
+
+* [**Fechas**](#Fechas)
+
+* [**Paquete lubridate**](#lubridate)
+
+
+
+] 
+
+.pull-right[
+.left[
+
+]
+
+* [**Paquete skim**](#skim)
+
+* [**Paquete naniar**](#naniar)
+
+* [**Factores**](#factores)
+
+* [**Taller práctico**](#actividad)
+
+
+] 
+
+
+
+
+
+
+---
+name: janitor
+
+class: inverse, middle, center
+
+# Paquete `janitor`
+---
+# Paquete `janitor`
+El paquete &lt;code&gt;janitor&lt;/code&gt; contiene funciones útiles para la limpieza y manejo de bases de datos sucias, algunas de sus funciones son:
+
+&lt;p&gt;&lt;code class="bold"&gt;clean_names()&lt;/code&gt; Permite limpiar los nombres de las variables de una base de datos, realizando algunas modificaciones:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Transforma todo a minúsculas.&lt;/li&gt;
+  &lt;li&gt;Reemplaza estapios por "_".&lt;/li&gt;
+  &lt;li&gt;Elimina tildes.&lt;/li&gt;
+  &lt;li&gt;Convierte % a "percent".&lt;/li&gt;
+  &lt;li&gt;¡entre otros!&lt;/li&gt;
+&lt;/ul&gt;
+
+.center[
+
+```r
+clean_names(nombre_base)
+```
+]
+
+
+&lt;p&gt;&lt;code class='bold'&gt;remove_empty()&lt;/code&gt; Permite remover las filas/columnas vacías de una base de datos.&lt;/p&gt;
+
+.center[
+
+```r
+remove_empty(nombre_base, which=c('rows','cols'))
+```
+]
+
+---
+name: stringr
+
+class: inverse, middle, center
+
+# Paquete `stringr`
+
+---
+
+# Paquete `stringr`
+
+El paquete &lt;code class="bold"&gt;stringr&lt;/code&gt; contiene múltiples funciones que nos permiten trabajar con stirngs de manera sencilla, estas pueden ser muy útiles para cuando queremos detectar, cambiar o eliminar patrones en vectores de tipo character, alguna de estas funciones son:
+
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class="bold"&gt;str_detect(objeto,pattern)&lt;/code&gt; :  Detecta si el patrón indicado existe o no en cada elemento del objeto, retorna TRUE o FALSE.&lt;/li&gt;
+  &lt;li&gt;&lt;code class="bold"&gt;str_extract(objeto,pattern)&lt;/code&gt; : Extrae de cada elemento la primera vez que el patrón se cumple.&lt;/li&gt;
+  &lt;li&gt;&lt;code class="bold"&gt;str_remove(objeto, pattern)&lt;/code&gt; : Elimina de cada elemento la primera ocurrencia del patrón.&lt;/li&gt;
+  &lt;li&gt;&lt;code class="bold"&gt;str_replace(objeto, pattern, replacement)&lt;/code&gt; : Reemplaza la primera ocurrencia del patrón por un patrón de reemplazo.&lt;/li&gt;
+&lt;/ul&gt;
+
+También existen los comandos &lt;code class="bold"&gt;str_extract_all()&lt;/code&gt;, &lt;code class="bold"&gt;str_remove_all()&lt;/code&gt; ,&lt;code class="bold"&gt;str_replace_all()&lt;/code&gt; que realizan las mismas acciones anteriores pero para todas las ocurrencias dentro de los elementos.
+
+Estos patrones pueden estar dados por expresiones regulares, para más información con respecto a estas pueden ejecutar el comando &lt;code class="bold"&gt;help(regex)&lt;/code&gt;.
+
+
+---
+name: Fechas
+
+class: inverse, middle, center
+
+# Fechas
+---
+# Fechas (clase `date`)
+.pull-left[
+ 
+
+En R la clase de archivo &lt;code class='bold'&gt;Date&lt;/code&gt; nos permite definir objetos y variables de bases de datos en un formato fecha. El comando &lt;code class="bold"&gt;as.Date&lt;/code&gt; nos permite transformar objetos y variables como fecha, para eso se tiene que configurar un [formato](https://support.sendwithus.com/jinja/jinja_time/) con ayuda de los siguientes códigos:
+
+
+]
+
+.pull-right[
+
+| Código | Descripción |
+| :-----: | ----- |
+| %Y | Año en 4 dígitos (1982)|
+| %y | Año en 2 dígitos (82)|
+| %m | Mes en 2 dígitos (01)|
+| %d | Día del mes en 2 dígitos (13)|
+| %A | Día de semana (Wednesday)|
+| %a | Día de la semana abreviado (Wed)|
+| %B | Mes (January)|
+| %b | Mes abreviado (Jan)|
+
+]
+
+A continuación presentamos tres formas distintas de definir el mismo objeto en formato fecha:
+
+
+```r
+as.Date("1982-01-13")
+as.Date("Jan-13-82", format = "%b-%d-%y")
+as.Date("13 January, 1982", format = "%d %B, %Y")
+```
+
+---
+name: lubridate
+
+class: inverse, middle, center
+
+# lubridate
+
+---
+# lubridate
+
+El paquete `lubridate` nos permite trabajar de manera eficiente con variables tipo fecha, es parte de tidyverse pero hay que instalarlo de manera independiente.
+
+Las funciones de este paquete son buenas para realizar operaciones entre fechas, una funcionalidad no incluida en R base.
+
+Puede definir codificar como fecha utilizando la funciones, `dmy()`,`mdy()`,`ymd()`, entre otras permutaciones dependiendo del formato.
+
+
+```r
+dmy('10011997')
+mdy("July 4th, 2000")
+ymd(20170131)
+```
+
+Puede obtener una componente de una fecha utilizando las funciones `date()`, `year()`, `month()`, `day()`, entre otras.
+
+
+```r
+month(mdy("July 4th, 2000"))
+```
+
+
+.footnote[[Web del paquete `lubridate`.](https://lubridate.tidyverse.org/)]
+---
+name: skimr
+
+class: inverse, middle, center
+
+# Paquete `skimr`
+---
+# Paquete `skimr`
+
+El paquete `skimr` contiene funciones que nos permiten resumir bases de datos de una manera más completa, esto gracias principalmente a la función `skim()`, que hace un resumen detallado de los objetos, este puede ser aplicado a vectores o a bases de datos, y entrega cosas distintas dependiento del tipo de objeto:
+
+
+.pull-left[
+**&lt;code class='bold'&gt;skim()&lt;/code&gt; aplicado a vectores.**
+
+- **Numérica:** hace un resumen de cuantiles y media, además de un histograma representativo de la distribución.
+
+- **Categórica:** hace un resumen de las frecuencias, cuenta el número de categorías, etc.
+
+
+]
+
+.pull-right[
+**&lt;code class='bold'&gt;skim()&lt;/code&gt; aplicado a bases de datos.**
+
+- **Resumen de datos:** Una tabla que contiene las dimensiones de la base y la frecuencia de cada tipo de columna.
+- **Resumen de cada tipo de columnas:** Agrupa en secciones los distintos tipos de variables y calcula para cada una los resúmenes respectivos.
+
+]
+
+La función `skimr()` también puede aplicarse a matrices.
+
+---
+
+# Funciones adicionales `skimr`
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class='bold'&gt;partition()&lt;/code&gt;: Nos entrega como resultado una lista de R, en donde cada elemento corresponde a un tipo de variable de la base de datos &lt;/li&gt;
+  &lt;/br&gt;
+  &lt;li&gt;&lt;code class='bold'&gt;yank()&lt;/code&gt;: Nos permite seleccionar qué tipo de variable queremos ver, funciona similar a la función &lt;code&gt;select()&lt;/code&gt; de &lt;code&gt;dplyr&lt;/code&gt;.&lt;/li&gt;
+  &lt;/br&gt;
+  &lt;li&gt;&lt;code class='bold'&gt;to_long()&lt;/code&gt; : Transforma el resultado de &lt;code&gt;skim()&lt;/code&gt; a una base de datos de 4 columnas. &lt;/li&gt;
+  &lt;/br&gt;
+  &lt;li&gt;&lt;code class='bold'&gt;focus()&lt;/code&gt; : Nos permite extraer una versión reducida de &lt;code&gt;skim()&lt;/code&gt;, permitiendo seleccionar las medidas que queremos observar en nuestro resultado. &lt;/li&gt;
+&lt;/ul&gt;
+
+
+.footnote[Para más información y ejemplos del paquete `skimr` visite el siguiente [**link**](https://cran.r-project.org/web/packages/skimr/vignettes/skimr.html).]
+
+---
+name: naniar
+
+class: inverse, middle, center
+
+# Paquete `naniar`
+
+---
+# Paquete `naniar`
+
+El paquete `naniar` contiene numerosas herramientas para explorar los valores faltantes (NA) de nuestras bases de datos, contando con herramientas de conteo, visualización, entre otras. La siguiente sección está basada en la web [**Exploring missing values in naniar**](https://allisonhorst.shinyapps.io/missingexplorer/#section-introduction) de Allison Horst. 
+
+.large[**Funciones de conteos de NA**]
+
+
+  - &lt;code class='bold'&gt;n_miss()&lt;/code&gt;: Retorna el total de NA en un data frame o columna.
+  
+  - &lt;code class='bold'&gt;n_complete()&lt;/code&gt;: Retorna el número de valores completos.
+  
+  - &lt;code class='bold'&gt;prop_miss()/pct_miss()&lt;/code&gt;: Proporción o porcentaje de valores `NA`
+  
+  - &lt;code class='bold'&gt;miss_var_summary()&lt;/code&gt;: Tabla de resumen de los `NA` por variable.
+  
+  - &lt;code class='bold'&gt;miss_case_table()&lt;/code&gt;: Tabla de resumen de los `NA` por fila.
+
+---
+
+# Funciones de visualización de NA
+
+
+La función &lt;code class='code'&gt;vis_miss()&lt;/code&gt; genera un mapa de calor con todas las variables, pintando de color negro los valores faltantes, por ejemplo:
+
+.pull-left[
+
+```r
+airquality %&gt;% vis_miss()
+```
+
+![](Clase_4_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+datos::aviones %&gt;% vis_miss()
+```
+
+![](Clase_4_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Funciones de visualización de NA
+
+La función &lt;code class='code'&gt;gg_miss_fct()&lt;/code&gt; genera un mapa de calor segregando por una variable categórica, lo que permite mostrar los cruces entre estas categorías y el número de NA:
+
+
+.left-code[
+
+```r
+gg_miss_fct(datos::aviones, fct = tipo_motor)
+```
+]
+
+.right-plot[
+&lt;img src="Clase_4_files/figure-html/plot-label-out-1.png" width="50%" /&gt;
+]
+
+---
+name: factores
+
+class: inverse, middle, center
+
+# Factores
+
+---
+# Factores
+
+Un **factor** es una variable categórica con un número finito de valores. En R los factores se utilizan habitualmente para realizar clasificaciones de los datos, estableciendo su pertenencia a los grupos o categorías determinados por los niveles del factor.
+
+Para definir un factor en R, se puede utilizar la función `factor`, el cual recibe como argumentos el vector de categorías, además, pueden definirse los argumentos `levels` y `labels` para definir el orden de los niveles del factor y sus nombres respectivamente.
+
+
+```r
+genero &lt;- c("M","H","M","M","M","H","M","M","H","H")
+factor(genero)
+```
+
+```
+##  [1] M H M M M H M M H H
+## Levels: H M
+```
+
+Se códifica la el vector genero como factor, creando los niveles H y M.
+
+
+```r
+factor(genero, levels = c("M","H"), labels = c("Mujer","Hombre"))
+```
+
+```
+##  [1] Mujer  Hombre Mujer  Mujer  Mujer  Hombre Mujer  Mujer  Hombre Hombre
+## Levels: Mujer Hombre
+```
+
+---
+name: actividad
+
+class: inverse, middle, center
+
+# Actividad
+
+---
+
+# Actividad
+
+El Servicio de Evaluación Ambiental SEA es la institución encargada de autorizar la operación de proyectos en Chile, que podrían tener impactos potenciales en la salud de la población o el medio ambiente.
+
+Cuando una empresa quiere llevar a cabo un proyecto de una magnitud relativamente grande, debe presentar un requisito a la SEA para evaluar el correcto y seguro funcionamiento de este proyecto. Si un proyecto es determinado como dañino para el medio ambiente o la población, la SEA puede denegar el permiso ambiental y, por lo tanto, la puesta en marcha de un proyecto.
+
+Desde el inicio de la SEA en 1997, más de 25 mil proyectos han sido evaluados por esta institución, por lo que la base de datos de la SEA contiene una gran cantidad de registros, que pueden ser útiles para analizar.
+
+Los datos del archivo “SEA_projects.csv” fueron extraídos el 15 de marzo de 2021 desde la página oficial del SEA, sabiendo que esta información es pública.
+
+---
+
+### Descripción variables base `SEA_projects.csv`
+
+| Nombre  | Descripción |
+| :------ | ------ |
+|**proyecto** | Nombre del proyecto.|
+|**tipo** | 	Tipo de proceso de evaluación. Los proyectos pueden presentar una declaración de impacto ambiental (DIA) o un estudio de impacto ambiental (EIA).|
+|**region**| Región donde se está llevando a cabo el proyecto.|
+|**empresa**| Empresa dueña del proyecto.|
+|**cod_tipologia**| Código de tipología de proyecto en función de su sector.|
+|**inversion**| Monto de la inversión en millones de dólares estadounidenses.|
+|**fecha_entrada**| Fecha en la que el proyecto ingresa al proceso SEA.|
+|**estado**| El estado actual de la evaluación del proyecto a fecha de revisión.|
+|**fecha_calificacion**| Fecha en la que se emitió la resolución final de la SEA. |
+
+---
+# Actividad
+
+&lt;b&gt;1.-&lt;/b&gt; Remueva las columnas y filas que solo contengan datos perdidos.
+
+&lt;b&gt;2.-&lt;/b&gt; Verifique que el formato de las variables y realice los cambios de formatos que sean necesarios.
+
+&lt;b&gt;3.-&lt;/b&gt; Obtenga un resumen de la base de datos, ¿En promedio cuantos millones de dólares se invierten en los proyectos de Chile?
+
+&lt;b&gt;4.-&lt;/b&gt; Realice un estudio de los datos faltantes (Na’s) en las distintas variables, ¿Qué proporción de Na’s se tiene para las distintas variables?
+
+&lt;b&gt;5.-&lt;/b&gt; Realice un análisis gráfico de los Na’s de las distintas variables segregado por los distintos estado de la variable estado. ¿A que se deben estos resultados?, comente.
+
+
+---
+
+name: adiós
+
+## Referencias y material complementario
+
+
+.large[**Paquete &lt;code&gt;janitor&lt;/code&gt;**]
+
+* [Ejemplos de funciones del paquete `janitor.`](https://cran.r-project.org/web/packages/janitor/vignettes/janitor.html)
+
+.large[**Paquete &lt;code&gt;stringr&lt;/code&gt;**]
+
+* [Cheatsheet `stringr`](https://github.com/rstudio/cheatsheets/raw/master/translations/spanish/strings_Spanish.pdf) (En español).
+
+.large[**Paquete &lt;code&gt;lubridate&lt;/code&gt;**]
+
+---
+class: inverse, center, middle
+
+
+# ¡Gracias!
+&lt;br&gt;
+&lt;br&gt;
+
+Diego Muñoz Ureta
+&lt;br&gt; 
+[**dimunoz1@uc.cl**](dimunoz1@uc.cl) 
+
+&lt;br&gt; 
+&lt;br&gt; 
+Felipe Moya
+&lt;br&gt; 
+[**felipe.moya@uc.cl**](felipe.moya@uc.cl) 
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "4:3"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
