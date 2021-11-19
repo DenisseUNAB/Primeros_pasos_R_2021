@@ -94,5 +94,91 @@ Sys.Date() %>% format("%d %B, %Y")
 
 # Paquete Skimr
 
+df %>% 
+  skim()
+
+df %>% 
+  focus()
+
+
+# Paquete naniar
+
+df %>% 
+  n_miss()
+
+df %>% 
+  n_complete()
+
+prop_miss(df)/pct_miss(df)
+
+
+df %>% 
+  miss_var_summary()
+
+
+
+df %>% vis_miss()
+
+datos::aviones
+
+gg_miss_fct(datos::aviones, fct = tipo_motor)
+
+
+# Factores ===========
+
+sexo <- c(1,0,0,0,0,0,1,1,1,0,0,1)
+sexo %>% as.character()
+sexo %>% factor() %>% summary()
+
+sexo %>% factor(levels = c(0,1),labels = c("Hombre","Mujer"))
+sexo %>% factor(levels = c(1,0),labels = c("Mujer","Hombre"))
+
+# Taller =========
+rm(list = ls())
+
+library(readxl)
+df <- read_excel("SEA_projects.xlsx", skip = 2)
+
+## a. ----
+# Remueva las columnas y filas que solo contengan datos perdidos.
+
+df <- df %>% 
+  remove_empty(which=c('rows','cols'))
+
+df %>% 
+  miss_var_summary()
+
+df %>% 
+  filter(!is.na(empresa))
+
+## b. ----
+# Verifique que el formato de las variables y realice los cambios de formatos que sean necesarios.
+
+df %>% glimpse()
+
+df <- df %>% 
+  mutate(tipo = factor(tipo),
+         estado = factor(estado),
+         fecha_entrada = ymd(fecha_entrada),
+         fecha_calificacion = ymd(fecha_calificacion)) 
+
+## c. ----
+# Obtenga un resumen de la base de datos, ¿En promedio cuantos millones de dólares se invierten en los proyectos de Chile?
+
+skim(df)
+# 28 millones de dolares en proyectos
+
+## d. ----
+# Realice un estudio de los datos faltantes (Na’s) en las distintas variables, ¿Qué proporción de Na’s se tiene para las distintas variables?
+
+df %>%
+  miss_var_summary()
+
+## e. ----
+# Realice un análisis gráfico de los Na’s de las distintas variables segregado por los distintos estado de la variable estado. ¿A que se deben estos resultados?, comente.
+
+
+gg_miss_fct(df, fct = estado)
+
 
 
