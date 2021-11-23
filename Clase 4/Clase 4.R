@@ -179,17 +179,3 @@ df %>%
 
 
 gg_miss_fct(df, fct = estado)
-
-library(tidyverse)
-
-Tabla1 <- df %>% 
-  group_by(Periodo) %>% 
-  summarise(Promedio_mes = mean(transaccion, na.rm = TRUE))
-
-
-df %>% 
-  group_by(Periodo,ID) %>%
-  summarise(Promedio_ID = mean(transacciones, na.rm = TRUE)) %>% 
-  left_join(Tabla1) %>% 
-  filter(Promedio_ID > Promedio_mes)
-  
