@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Curso Primeros Pasos en R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Profesor: Diego Muñoz" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/rladies-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: left, bottom
+background-image: url(media/ds6.jpg)
+background-size: cover
+
+.left[&lt;img src="media/logo.png" style="width: 40%" /&gt;]
+
+&lt;br&gt;
+&lt;br&gt;
+
+
+# **Curso Primeros Pasos en R**
+
+----
+## Clase 5: Introducción a Tidyverse
+### Profesor: Diego Muñoz
+#### Pontificia Universidad Católica de Chile
+###### Noviembre 2021
+&lt;br&gt;
+&lt;br&gt;
+
+---
+class: left, middle
+
+# Clase 5: Introducción a Tidyverse
+
+----
+.pull-left[
+.left[
+
+]
+
+* [**Introducción a `tidyverse`**](#tidy)
+
+* [**Sintaxis en `tidyverse`**](#tidy2)
+
+* [**Funciones `dplyr`**](#dplyr)
+
+* [**Estructura de control**](#case_when)
+
+] 
+
+.pull-right[
+.left[
+
+]
+
+
+* [**Actividad 1 `dplyr`**](#act1)
+
+* [**Actividad 2 `dplyr`**](#act1)
+
+.large[**Anexos**]
+
+* [Comando `if`.](#if)
+* [Comando `else`.](#else)
+* [Comando `ifelse`.](#ifelse)
+
+] 
+
+
+
+
+
+
+---
+name: tiyd
+
+class: inverse, middle, center
+
+# Paquete `tidyverse`
+---
+# Paquete `tidyverse`
+&lt;p&gt;El &lt;code class='bold'&gt;tidyverse&lt;/code&gt; es un universo de paquetes para Data Science en R. Algunos de sus paquetes centrales son:&lt;/p&gt;
+
+.pull-left[
+
+
+&lt;div&gt;&lt;b&gt;• ggplot2 :&lt;/b&gt; Visualización de datos. &lt;/div&gt;
+&lt;/br&gt;
+&lt;div&gt;&lt;b&gt;• dplyr :&lt;/b&gt; Manipulación de datos.&lt;/div&gt;
+&lt;/br&gt;
+&lt;div&gt;&lt;b&gt;• tidyr :&lt;/b&gt; Herramientas para ordenar datos.&lt;/div&gt;
+&lt;/br&gt;
+&lt;div&gt;&lt;b&gt;• tibble :&lt;/b&gt; Reinvención de data frames.&lt;/div&gt;
+&lt;/br&gt;
+&lt;div&gt;&lt;b&gt;• stringr :&lt;/b&gt; Manejo con cadenas de texto (strings).&lt;/div&gt;
+&lt;/br&gt;
+&lt;div&gt;&lt;b&gt;• readr :&lt;/b&gt; Importación de datos.&lt;/div&gt;
+
+Y muchos más: **purrr**, **forcats**, **lubridate**, **readxl**, **haven**, etc.
+
+]
+
+.pull-right[
+&lt;img src='media/tidy.png' width='300px'&gt;
+]
+
+---
+### Instalación/carga de tidyverse.
+
+&lt;p&gt;En la clase anterior instalamos el paquete &lt;code&gt;tidyverse&lt;/code&gt;. Para cargarlo en nuestra sesión tenemos que usar el comando &lt;code&gt;library()&lt;/code&gt;. (Si estás usando RStudioCloud tendrán que instalarlo nuevamente):&lt;/p&gt;
+
+
+```r
+install.packages("tidyverse") # Instalar tidyverse
+
+library(tidyverse) # Cargarlo en la sesión
+```
+
+Esto carga los ocho paquetes centrales del &lt;code&gt;tidyverse&lt;/code&gt;: &lt;code&gt;dplyr, tidyr, tibble, ggplot2, purrr, stringr, forcats, readr&lt;/code&gt;. El resto de los paquetes es necesario cargarlos de manera individual.
+
+---
+name: tidy2
+
+class: inverse, middle, center
+
+# Sintaxis en Tidyverse
+
+---
+
+# Sintaxis en Tidyverse
+
+&lt;p&gt; La sintaxis del &lt;code class='bold'&gt;tidyverse&lt;/code&gt; se ha popularizado en los últimos años porque permite leer el código y programar de forma más parecida a como leemos (de izquierda a derecha y de arriba hacia abajo). Esto es posible gracias al operador "pipe" &lt;code class='bold'&gt;%&gt;%&lt;/code&gt; (Ctrl/Cmd + Shift + M), que funciona de la siguiente forma: &lt;/p&gt;
+
+.center[&lt;img src='media/funcion3.png' width="500px"&gt;]
+
+.pull-left[
+&lt;b&gt;Ejemplo R base:&lt;/b&gt;
+
+```r
+mean(paises[paises$anio == 2007,
+            ]$poblacion)
+```
+]
+
+.pull-right[
+&lt;b&gt;Ejemplo &lt;code&gt;tidyverse&lt;/code&gt; :&lt;/b&gt;
+
+```r
+paises %&gt;% 
+  filter(anio == 2007) %&gt;% 
+  summarize(mean(poblacion))
+```
+]
+
+
+---
+name: dplyr
+
+class: inverse, middle, center
+
+# Paquete `dplyr` 
+---
+# Paquete `dplyr` 
+.pull-left[
+&lt;p&gt; &lt;code class='bold'&gt;dplyr&lt;/code&gt; es un paquete enfocado en la manipulación de datos. Es decir, nos permite realizar acciones como seleccionar columnas, filtrar filas, crear y ordenar variables, unir bases de datos, entre otras. &lt;/p&gt;
+]
+
+
+.pull-right[
+&lt;img src='media/dplyr.png' width='100px'&gt;
+]
+
+.right[
+&lt;/br&gt;
+&lt;h1&gt;Paquete &lt;code&gt;ggplot2&lt;/code&gt;&lt;/h1&gt;
+]
+
+
+.pull-left[
+.right[&lt;img src='media/ggplot2.png' width='100px'&gt;]
+]
+
+.pull-right[
+&lt;p&gt; &lt;code class='bold'&gt;ggplot2&lt;/code&gt; es un paquete que permite la creación de gráficos en R. Es la herramienta de visualización más populr, dadas la gran cantidad de opciones de personalización que ofrece. &lt;/p&gt;
+]
+
+---
+name: dplyr2
+
+class: inverse, middle, center
+
+# Funciones más usadas de `dplyr`
+
+---
+# Funciones más usadas de `dplyr`
+
+&lt;code class='bold'&gt;select()&lt;/code&gt; : Permite seleccionar variables (columnas).
+
+
+```r
+base %&gt;% 
+  select(nombre_variable)
+```
+
+
+&lt;code class='bold'&gt;filter()&lt;/code&gt; : Permite filtrar las observaciones de la base dado un criterio definido.
+
+
+```r
+base %&gt;%  
+  filter(&lt;Condición asociada a una variable&gt;)
+```
+
+&lt;code class='bold'&gt;group_by()&lt;/code&gt; : Agrupa filas a partir de categoría de una o más variables.
+
+
+```r
+base %&gt;% 
+  group_by(nombre_variable)
+```
+
+&lt;code class='bold'&gt;summarise()&lt;/code&gt; : Calcula un resumen a base a funciones de R.
+
+```r
+base %&gt;% 
+  summarise(nombre_calculo = &lt;Función de una variable&gt;, ...)
+```
+
+---
+
+&lt;code class='bold'&gt;mutate()&lt;/code&gt; : Crea nuevas variables (o modifica las existentes).
+
+```r
+base %&gt;% 
+  mutate(nueva_variable = &lt;Cálculo en base a una variable&gt;,...)
+```
+
+
+&lt;code class='bold'&gt;rename()&lt;/code&gt; : Renombra columnas.
+
+```r
+base %&gt;% 
+  rename(nuevo_nombre = nombre_variable)
+```
+
+&lt;code class='bold'&gt;count()&lt;/code&gt; : Cuenta el número de observaciones en cada grupo. 
+
+```r
+base %&gt;% 
+  count(nombre_variable)
+```
+
+
+&lt;code class='bold'&gt;slice()&lt;/code&gt; : Permite extraer observaciones (filas) de acuerdo a su posición.
+
+
+```r
+base %&gt;% 
+  slice(vector_de_filas)
+```
+
+&lt;code class='bold'&gt;arrange()&lt;/code&gt; : Ordena las filas según los valores de una columna.
+
+```r
+base %&gt;% 
+  arrange(nombre_variable)
+```
+
+---
+name: case_when
+
+class: inverse, middle, center
+
+# Comando `case_when`
+
+---
+name: case_when
+# Comando `case_when`
+
+El comando `case_when` de la librería `dplyr`, permite evaluar múltiples `if` e `ifelse` al mismo tiempo. Es el equivalente de la sentencia `CASE WHEN` de SQL. Este funciona de la siguiente forma:
+
+
+```r
+case_when(&lt;Condición 1&gt; ~ &lt;Resultado si condición 1 es TRUE&gt;,
+          &lt;Condición 2&gt; ~ &lt;Resultado si condición 2 es TRUE&gt;,
+          ...)
+```
+
+Es un comando especialmente útil para recodificar variables categóricas. 
+
+**Ejemplo:** Definamos un `case_when()` que nos permita replicar el ejemplo anterior: 
+
+
+```r
+case_when(nota &lt; 1 ~ "Error, ingrese un número entre 1 y 7.",
+          nota &gt; 7 ~ "Error, ingrese un número entre 1 y 7.",
+          is.numeric(nota) == FALSE ~ "Error, ingrese un número.",
+          nota &gt;= 4 ~ "¡Felicitaciones!",
+          nota &lt;4 ~ "Reprobaste")
+```
+
+
+---
+name: act1
+
+class: inverse, middle, center
+
+# Actividad 1
+
+---
+
+# Actividad 1
+
+&lt;p&gt;La base de datos &lt;code class='blanco'&gt;playstore.xlsx&lt;/code&gt; contiene información sobre algunas aplicaciones para dispositivo móvil ofrecidas en la plataforma. Importe la base de datos &lt;code class='blanco'&gt;playstore.xlsx&lt;/code&gt; y realice lo siguiente:
+
+&lt;b&gt;1.-&lt;/b&gt; Ordene según la variable `Tamaño`
+
+&lt;b&gt;2.-&lt;/b&gt; Filtre por las aplicaciones que son *pagadas*
+
+&lt;b&gt;3.-&lt;/b&gt; Agregue la variable `Ganancias` definidas como el precio ponderado por la cantidad de descargas
+
+&lt;b&gt;4.-&lt;/b&gt; Agrupe por `Categoría`
+
+&lt;b&gt;5.-&lt;/b&gt; Obtenga la `Ganancia` promedio por las distintas `Categorías` 
+
+
+---
+name: act2
+
+class: inverse, middle, center
+
+# Actividad 2
+
+---
+# Actividad 2 propuesto
+
+
+&lt;p&gt; Vuelva a utilizar la base de datos &lt;code class='blanco'&gt;viviendasRM.xlsx&lt;/code&gt; que contiene avisos de viviendas usadas que se venden en la Región Metropolitana de Chile. El objetivo es replicar la actividad de hace unas clases, pero con la lógica de dplyr, es decir:
+
+Usando funciones de dplyr junto con el operador pipe &lt;code class='blanco'&gt;%&gt;%&lt;/code&gt; indique:
+
+&lt;ol type="a"&gt;
+  &lt;li&gt; Toda la información del cuarto registro. &lt;/li&gt;
+  &lt;/br&gt;
+  &lt;li&gt; El número de baños de la vivienda del registro 8. &lt;/li&gt;
+  &lt;/br&gt;
+  &lt;li&gt; El numero de estacionamientos de la vivienda 14. &lt;/li&gt;
+  &lt;/br&gt;
+  &lt;li&gt; Total de superficie M2 y valor en UF, para las viviendas desde la quinta a la décima. &lt;/li&gt;
+  &lt;/br&gt;
+  &lt;li&gt; Listado de superficie M2, corredor y valor en UF de viviendas cuya superficie M2 es igual a 100 m2.&lt;/li&gt;
+&lt;/ol&gt;
+
+---
+name: anexo
+
+class: inverse, middle, center
+
+# Anexos
+---
+# Anexos
+
+&lt;p&gt;En programación, una estructura de control es un tipo de comando que nos permite controlar cuándo se ejecuta nuestro código, mediante sentencias condicionales, las cuales se definen usando operadores lógicos. &lt;/p&gt;
+
+
+&lt;b&gt;Ejemplos de sentencias condicionales:&lt;/b&gt;
+
+
+| Sentencia condicional | Código |
+| ------- | ------- |
+| Es un número es mayor o igual a 4. | numero &gt;= 4 |
+| Es un número par. | numero %% 2 == 0 |
+| Nació antes del 1998 | anho_nacimiento &lt; 1998 |
+| Tiene educación superior completa. | nivel_edu == "Superior Completa" |
+
+---
+
+# Comando &lt;code&gt;if&lt;/code&gt;
+
+&lt;p&gt;El comando &lt;code class="bold"&gt;if()&lt;/code&gt; se usa para ejecutar un código sólo cuando se cumpla una condición específica. Es equivalente a un si lógico (sí), esto se usa de la siguiente forma: &lt;/p&gt;
+
+
+```r
+if( Condición ){
+  Código a ejecutar si la condición es VERDADERA
+}
+```
+
+--
+
+&lt;p&gt; &lt;b&gt;Ejemplo: &lt;/b&gt; Si la calificación de un estudiante es &lt;b&gt;mayor o igual a 4&lt;/b&gt;, entonces imprima en la consola un mensaje de felicitaciones.&lt;/p&gt;
+
+--
+
+
+```r
+if(nota &gt;= 4){
+  print("¡Felicitaciones! :)")
+}
+```
+
+---
+name: else
+
+class: inverse, middle, center
+
+# Comando &lt;code&gt;else&lt;/code&gt;
+
+---
+# Comando &lt;code&gt;else&lt;/code&gt;
+
+&lt;p&gt;El comando &lt;code class="bold"&gt;else()&lt;/code&gt; se usa para añadir condiciones a un &lt;class="bold"&gt;if&lt;/code&gt;. Equivale a decir "en otro caso", esto se usa de la siguiente forma: &lt;/p&gt;
+
+
+```r
+if( Condición ){
+  Código a ejecutar si la condición es VERDADERA
+}else{
+  Código a ejecutar si la condición es FALSA
+}
+```
+
+--
+
+&lt;p&gt;&lt;b&gt;Ejemplo:&lt;/b&gt; Si la calificación de un estudiante es &lt;b&gt;mayor o igual a 4&lt;/b&gt;, imprima un mensaje de felicitaciones. En otro caso, ejecute un mensaje de reprobación.&lt;/p&gt;
+
+--
+
+```r
+if(nota &gt;= 4){
+  print("¡Felicitaciones! :)")
+}else{
+  print("Reprobaste :(")
+}
+```
+
+---
+name: ifelse
+
+class: inverse, middle, center
+
+# Comando &lt;code&gt;ifelse&lt;/code&gt;
+
+---
+
+
+# Comando &lt;code&gt;ifelse&lt;/code&gt;
+
+
+El comando &lt;code class="bold"&gt;ifelse()&lt;/code&gt; acorta la escritura anterior, pudiendo escribir un &lt;code class="bold"&gt;if()&lt;/code&gt; y un &lt;code class="bold"&gt;else()&lt;/code&gt; con sólo un comando. Este se usa de la siguiente forma:
+
+
+```r
+ifelse(Condición,
+       Código si condición es VERDADERA,
+       Código si condición es FALSA)
+```
+
+
+.pull-left[
+.center[**Con `if()` y `else()`**]
+
+
+```r
+if(nota &gt;= 4){
+  print("¡Felicitaciones!")
+}else{
+  print("Reprobaste")
+}
+```
+]
+
+.pull-right[
+
+.center[**Con `ifelse()`**]
+
+
+```r
+ifelse(nota &gt;= 4,
+       print("¡Felicitaciones!"),
+       print("Reprobaste") )
+```
+]
+
+--
+
+.large[.center[¿Qué pasa si ingresamos una nota negativa o una nota mayor a 7? ¿Tiene sentido, en el primer caso, considerar un error de tipeo como un "reprobado"?] ]
+
+---
+
+name: encadenar
+# Encadenar `if` y `else`
+
+&lt;p&gt;Se puede encadenar &lt;code&gt;if()&lt;/code&gt; y &lt;code&gt;else()&lt;/code&gt; para generar condiciones más robustas, por ejemplo, en el caso anterior se puede añadir una condición que entregue un error si se ingresa un número fuera del rango o un objeto que no sea numérico:&lt;/p&gt;
+
+
+```r
+if((nota &lt; 1) | (nota &gt; 7) | (is.numeric(nota) == FALSE)) { 
+  print("Error, ingrese un número entre 1 y 7")
+}else if (nota &gt;= 4) {
+    print("¡Felicitaciones!")
+  } else{
+    print("Reprobaste")
+  }
+}
+```
+
+&lt;p&gt;Tambien, se puede hacer &lt;code class="bold"&gt;ifelse()&lt;/code&gt;:&lt;/p&gt;
+
+
+```r
+ifelse( (nota &lt; 1) | (nota &gt; 7) | (is.numeric(nota) == FALSE),
+       print("Error, ingrese un número entre 1 y 7"),
+       ifelse(nota &gt;= 4,
+              print("¡Felicitaciones!"),
+              print("Reprobaste")))
+```
+
+
+
+
+---
+
+name: adiós
+
+## Referencias y material complementario
+
+
+[**Capítulo sobre visualización de datos del libro "R para Ciencia de Datos"`**](https://es.r4ds.hadley.nz/visualizaci%C3%B3n-de-datos.html), de Hadley Wickham y Garrett Grolemund.
+
+[**Cheatsheet Domar Datos con `dplyr` y `tidyr`**](https://github.com/rstudio/cheatsheets/raw/master/translations/spanish/data-wrangling-cheatsheet_Spanish.pdf), Traducido por Frans van Dunné.
+
+[**Cheatsheet Transformación de Datos con `dplyr`**](https://github.com/rstudio/cheatsheets/raw/master/translations/spanish/data-transformation_Spanish.pdf)
+
+---
+
+name: gracias
+
+class: inverse, center, middle
+
+
+# ¡Gracias!
+&lt;br&gt;
+&lt;br&gt;
+
+Diego Muñoz
+&lt;br&gt; 
+[**dimunoz1@uc.cl**](dimunoz1@uc.cl) 
+
+&lt;br&gt; 
+&lt;br&gt; 
+Felipe Moya
+&lt;br&gt; 
+[**felipe.moya@uc.cl**](felipe.moya@uc.cl) 
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "4:3"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
