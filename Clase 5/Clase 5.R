@@ -95,9 +95,8 @@ library(readxl)
 url <- "https://github.com/DiegoHoliwis/Primeros_pasos_R_2021/raw/main/Clase%205/playstore.xlsx"
 destfile <- "playstore.xlsx"
 curl::curl_download(url, destfile)
-playstore <- read_excel(destfile)
-
-openxlsx::read.xlsx()
+playstore <- read_excel(destfile)                        # opción 1
+playstore <- openxlsx::read.xlsx(destfile) %>% tibble()  # opción 2
 
 #1.- 
 playstore %>% 
