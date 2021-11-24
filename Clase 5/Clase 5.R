@@ -7,14 +7,20 @@
 
 library(tidyverse)
 library(datos)
-
+install.packages("ellipsis")
 # Sintaxis en tidyverse ----
+
+
+file.choose()
+install.packages("openxlsx")
 
 
 paises %>% 
   filter(anio == 2007) %>% 
   summarize(mean(poblacion))
 
+file.choose()
+openxlsx::read.xlsx()
 
 summarize(filter(paises, anio == 2007), mean(poblacion))
 
@@ -79,6 +85,51 @@ paises %>%
                                              esperanza_de_vida >= 75 ~ "Alta",
                                              TRUE ~ "Edad no admisible")) %>% 
   View()
+
+
+# Actividad 1 ============================
+
+rm(list = ls()) # eliminar todo lo creado anteriormente
+
+library(readxl)
+url <- "https://github.com/DiegoHoliwis/Primeros_pasos_R_2021/raw/main/Clase%205/playstore.xlsx"
+destfile <- "playstore.xlsx"
+curl::curl_download(url, destfile)
+playstore <- read_excel(destfile)
+
+openxlsx::read.xlsx()
+
+#1.- 
+playstore %>% 
+  arrange(`Tamaño(M)`)
+
+#2.-
+playstore %>% 
+  filter(Tipo == "Pago")
+
+#3.-
+playstore %>% 
+  select(Descargas)
+
+playstore %>% 
+  mutate(Descargas = Descargas %>% str_remove_all("\\,") %>% str_remove_all(" aprox.") %>% as.integer(),
+         Ganancias = Descargas*Precio)
+
+#4.- 
+playstore %>% 
+  group_by(Categoría)
+
+#5.- 
+
+playstore %>% 
+  arrange(`Tamaño(M)`) %>% 
+  filter(Tipo == "Pago") %>% 
+  mutate(Descargas = Descargas %>% str_remove_all("\\,") %>% str_remove_all(" aprox.") %>% as.integer(),
+         Ganancias = Descargas*Precio) %>% 
+  group_by(Categoría) %>% 
+  summarise(Ganancia_promedio = mean(Ganancias)) %>% 
+  View()
+
 
 
 
