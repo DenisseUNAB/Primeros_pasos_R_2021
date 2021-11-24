@@ -129,12 +129,3 @@ playstore %>%
   summarise(Ganancia_promedio = mean(Ganancias)) %>% 
   View()
 
-
-
-
-
-
-
-
-
-
