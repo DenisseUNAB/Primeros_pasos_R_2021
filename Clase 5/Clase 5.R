@@ -114,7 +114,7 @@ playstore %>%
   mutate(Descargas = Descargas %>% str_remove_all("\\,") %>% str_remove_all(" aprox.") %>% as.integer(),
          Ganancias = Descargas*Precio)
 
-#4.- 
+#4.-  
 playstore %>% 
   group_by(Categoría)
 
