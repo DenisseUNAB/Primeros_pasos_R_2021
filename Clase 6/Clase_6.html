@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Curso Primeros Pasos en R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Profesor: Diego Muñoz" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/rladies-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: left, bottom
+background-image: url(media/ds6.jpg)
+background-size: cover
+
+.left[&lt;img src="media/logo.png" style="width: 40%" /&gt;]
+
+&lt;br&gt;
+&lt;br&gt;
+
+
+# **Curso Primeros Pasos en R**
+
+----
+## Clase 6: Visualización de datos con `ggplot2`
+### Profesor: Diego Muñoz
+#### Pontificia Universidad Católica de Chile
+###### Noviembre 2021
+&lt;br&gt;
+&lt;br&gt;
+
+----
+---
+class: left, middle
+
+# Clase 6: Visualización de datos con `ggplot2`
+
+----
+.pull-left[
+.left[
+]
+
+* [**Introducción**](#intro)
+
+* [**Algunos tipos de gráficos de `ggplot2`**](#tipos)
+
+* [**Customización de gráficos**](#custom)
+
+] 
+
+.pull-right[
+.left[
+
+]
+
+* [**Paneles gráficos**](#paneles)
+
+* [**Otros gráficos relacionados**](#otros)
+
+* [**Taller práctico**](#taller)
+
+
+] 
+
+---
+name: intro
+class: inverse, middle
+# Introducción
+
+---
+# Gráficos en R 
+
+&lt;p&gt;R base tiene herramientas gráficas limitadas, tanto en la cantidad de opciones que se tiene, como su personalización. Es por eso, que se usarán los gráficos de &lt;code class='bold'&gt;ggplot2&lt;/code&gt;. Estas herramientas, permiten generar una gran cantidad de gráficos a partir de la misma base computacional.&lt;/p&gt;
+
+.center[ 
+
+.center[.large[**Funciones R base y `ggplot2`**]]
+
+| Gráfico | R Base | ggplot2 |
+| :------ | :----: | :------: |
+| Puntos | plot() | geom_point() |
+| Lineas | plot(..., type="l") | geom_line() |
+| Histograma | hist() | geom_histogram() |
+| Barras | barplot() | geom_bar() |
+| Boxplot | boxplot() | geom_boxplot() |
+]
+
+
+---
+# El paquete ggplot2
+
+
+.pull-left[
+
+&lt;br&gt;
+**ggplot2** es un paquete de R para producir gráficos. A diferencia de la mayoría de los paquetes de gráficos, ggplot2 tiene una gramática subyacente, basada en la gramática de los gráficos, un sistema coherente para describir y construir gráficos, combinando componentes independientes.
+
+]
+
+.pull-right[
+
+&lt;img src="media/ggplot2.png" width="300px"/&gt;
+
+]
+
+
+
+---
+
+
+# Gráficos con `ggplot2`
+
+&lt;p&gt;Se basa en una &lt;b&gt;gramática de gráficos&lt;/b&gt;, que permite describir los componentes de un gráfico como una combinación de capas:&lt;/p&gt;
+
+
+.pull-left[
+.center[.&lt;img src='media/capas.jpg' width='300px'&gt;]
+]
+.pull-right[
+
+1. Un gráfico se inicia con la función `ggplot()`, la que crea el sistema de coordenadas de nuestro gráfico.
+  &lt;/br&gt;
+  
+2. Cada capa adicional se agrega con un símbolo `+`, acompañado de la función deseada.
+
+]
+
+---
+name: ggplot2
+# Gráficos con `ggplot2`
+
+&lt;p&gt;Un gráfico básico de &lt;code&gt;ggplot&lt;/code&gt; requiere definir al menos tres elementos: &lt;/p&gt;
+
+1. Los **datos** a utilizar.
+  &lt;/br&gt;
+
+2. Los parámetros **estéticos** con que se registrarán las variables, es decir, cómo se asignarán las variables de nuestro conjunto de datos a ciertas propiedades visuales. Esto considera ejes de gráficos, colores, etc. La función para indicar esto es &lt;code class='bold'&gt;aes()&lt;/code&gt; (del inglés "aesthetics").
+  &lt;/br&gt;
+
+3. Una capa que indique la **forma** en que se representarán gráficamente los datos (con la función &lt;b&gt;geom_*()&lt;/b&gt;).
+
+.center[
+
+```r
+ggplot(data = &lt;DATOS&gt;, aes(&lt;MAPEOS&gt;)) + 
+  geom_&lt;TIPO DE GRÁFICO&gt;(...)
+```
+]
+
+
+---
+name: tipos
+class: inverse, middle
+# Algunos tipos de gráficos de `ggplot2`
+
+---
+# Las capas (geom)
+
+Las capas sirven para proporcionar información sobre cómo queremos visualizar los datos. Esto se lleva a cabo a través de un **geom**. 
+
+&lt;img src="media/plot_zoom.png" width="700px"/&gt;
+
+Otras geometrías disponibles:
+.pull-left[
+* `geom_area()` 
+* `geom_quantile()` 
+* `geom_violin()`
+* `geom_density()`
+* `geom_errorbar()`
+
+]
+.pull-right[
+* `geom_smooth()`
+* `geom_dotplot()`
+* `geom_linerange()`
+* `geom_text()`
+* ¡Entre otras!
+]
+
+Cada uno de ellos contiene, distintos argumentos de personalización propios de cada tipo de gráfico. 
+
+---
+## Histograma (`geom_histogram()`)
+
+
+```r
+ggplot(data = paises, mapping = aes(x = pib_per_capita)) +
+  geom_histogram(color = "white", 
+                 fill ="#9292ff",
+                 bins = 15) 
+```
+
+.pull-left[
+Se usa para visualizar la distribución de los valores de una variable numérica.
+
+* El argumento `color` (o `colour`) corresponde al color de la línea de las barras del histograma.
+
+* El argumento `fill` corresponde al color de las barras del histograma.
+
+* El argumento `bins` permite elegir el número de barras a graficar. También, se puede usar `bin-width` para definir el ancho de cada barra. 
+]
+
+.pull-right[
+&lt;img src="Clase_6_files/figure-html/fig1-out-1.png" width="100%" /&gt;
+]
+
+---
+
+## Gráfico de puntos (`geom_point()`)
+
+
+```r
+ggplot(data = paises, mapping = aes(x = pib_per_capita, 
+                                    y = esperanza_de_vida)) +
+  geom_point(color = "#ff7979", size = 8, alpha = 0.3) 
+```
+
+
+.pull-left[
+Se usa para encontrar relaciones o patrones entre dos variables (al
+menos una debe ser numérica).
+
+* El argumento `color` (o `colour`) permite elegir el color del punto.
+
+* El argumento `size` permite elegir el tamaño de dibujo del punto. Se le ingresa un número natural.
+
+* El argumento `alpha` permite elegir el nivel de transparencia de los puntos. Toma valores entre 0 y 1. Mientras más cercano a 0 los puntos son más transparentes. 
+
+]
+
+.pull-right[
+&lt;img src="Clase_6_files/figure-html/fig2-out-1.png" width="100%" /&gt;
+]
+
+---
+
+
+```r
+ggplot(data = paises, mapping = aes(x = pib_per_capita, 
+                                    y = esperanza_de_vida)) +
+  geom_point(shape = 24, size = 8, 
+             color = "black",  fill = "#c5c5ff") 
+```
+
+.pull-left[
+El argumento `shape` permite elegir el tipo de punto a usar. En R hay 26 tipos de puntos: 
+
+.center[&lt;img src="media/pch.png" width="270px"&gt;]
+
+
+]
+
+.pull-right[
+&lt;img src="Clase_6_files/figure-html/fig3-out-1.png" width="100%" /&gt;
+]
+
+Hay 5 tipos de puntos con relleno, desde el 21 al 25. Cuando se usa alguno de estos, el argumento `color` pasa a definir el color del borde, y el argumento `fill` pasa a ser el de relleno.
+
+---
+## Box Plot (`geom_boxplot()`)
+
+
+```r
+ggplot(data = paises, mapping = aes(x = continente, y = esperanza_de_vida) ) +
+  geom_boxplot(color = "#157EA3",
+               fill = "#EB0052") 
+```
+
+
+.pull-left[
+
+Para observar la distribución de una variable
+numérica. Muy útil para
+comparar las distribuciones por grupo.
+
+* Se define la variable numérica en el eje `y`. Se agrega una segunda variable en el eje `x`. Permite separar el boxplot en grupos. 
+
+* Se puede modificar la dirección de la caja desde `aes()`.
+
+* El argumento `color` (o `colour`) permite elegir el color del borde.
+
+* El argumento `fill` permite elegir el color de relleno de la caja.
+
+
+]
+
+.pull-right[
+&lt;img src="Clase_6_files/figure-html/fig4-out-1.png" width="100%" /&gt;
+]
+
+
+
+---
+## Gráfico de líneas (`geom_line()`)
+
+
+
+```r
+ggplot(data = paises[paises$pais == "Chile",] , 
+       aes(x = anio, y = esperanza_de_vida)) + 
+  geom_line( color = "#E61400", size = 2) 
+```
+
+.pull-left[
+  
+Se usa para analizar tendencias de
+una variable numérica en el tiempo.
+En el ejemplo, se presenta la
+evolución de la esperanza de vida
+en Chile desde 1960.
+
+* El argumento `color` permite elegir el color de la línea.
+
+* El argumento `size` permite elegir el grosor de la línea.
+]
+
+
+.pull-right[
+&lt;img src="Clase_6_files/figure-html/figline-1.png" width="100%" /&gt;
+]
+---
+name: custom
+class: inverse, middle
+# Customización de gráficos
+
+---
+## Ejes y títulos
+
+En `ggplot2` existen diferentes formas de definir títulos, subtítulos y nombres en los ejes. A continuación se presentaran dos formas de definir los mismos elementos de un gráfico:
+
+**Forma 1:** Funciones `ggtitle`, `xlab`, `ylab`
+ 
+
+```r
+ggplot(...) +
+ ggtitle(label = "Título", subtitle = "Sub título") +
+ xlab(label = "Eje X") + 
+ ylab(label = "Eje Y") 
+```
+
+**Forma 2:** Función `labs`
+ 
+
+```r
+ggplot(...) +
+ labs(title = "Título",
+      subtitle = "Sub título",
+      x = "Eje X",
+      y = "Eje Y") 
+```
+ 
+
+
+
+---
+## Ejes y títulos
+
+
+```r
+ggplot(data = paises[paises$pais == "Chile", ] , 
+       aes(x = anio, y = esperanza_de_vida)) + 
+  geom_line() +
+  geom_point() +
+  labs(title = "Esperanza de vida en Chile", 
+       subtitle = "Años 1952 a 2007",
+       x = "Año",
+       y = "Esperanza de vida") 
+```
+
+&lt;img src="Clase_6_files/figure-html/fig_labels-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+name: color
+## Argumentos `color` y `size` 
+
+Dentro del comando `aes()` se puede indicar el argumento `color`. Este permite colorear los elementos del gráfico con respecto a una variable de la base de datos. Junto con esto, se puede incluir una leyenda que describirá qué significa cada color. La forma en que ggplot pinta los objetos visuales, depende del tipo de variable:
+
+  * **Variable numérica** : Elige un gradiente de colores, donde la intensidad del color depende de la variable numérica. 
+  
+  * **Variable categórica/factor** : Elige un color distinto por cada nivel del factor.
+
+Otro argumento de `aes()` es `size`, el cual permite cambiar el tamaño de elementos visuales a través de una variable. Usualmente, se utiliza con variables numéricas continuas y es aplicado en gráficos de puntos. 
+
+Estos argumentos pueden ser definidos tanto dentro del comando **`ggplot()`**, como en los comandos de geometrías **`geom_*()`** respectivas. 
+
+---
+
+
+```r
+ggplot(data = paises, 
+       aes(x = esperanza_de_vida, y = pib_per_capita)) +
+* geom_point(aes( size = poblacion, color = continente), alpha = 0.7)
+```
+
+&lt;img src="Clase_6_files/figure-html/fig_colorpoint-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+
+```r
+ggplot(data = base_vecinos, 
+       aes(x = esperanza_de_vida, y = pib_per_capita)) +
+* geom_point(aes(color = poblacion), size = 5)
+```
+
+&lt;img src="Clase_6_files/figure-html/fig_colorpoint2-1.png" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+name: yosoy
+## Personalización de la leyenda
+
+La leyenda puede personalizarse mediante el argumento `theme()`, función que permite modificar la mayoría de los elementos estéticos de un ggplot. En el caso de la leyenda usaremos, se usarán los siguientes argumentos: 
+
+  - **`legend.position`** - Permite modificar la posición de la leyenda. Recibe los argumentos `top`, `bottom`, `left`, `right`, `none`. 
+  - **`legend.title`** - Permite modificar el título de la leyenda. Para quitar el nombre definir `element_blank()`.
+  - **`legend.background`** - Permite modificar el color del fondo del cuadro de la leyenda. 
+  - etc.
+
+A continuación, se visualizará un gráfico de lineas y puntos de la evolución de esperanza de vida de los paises vecinos a Chile a través de los años: 
+  
+---
+
+
+```r
+ggplot(data = base_vecinos, 
+       aes(x = anio, y = esperanza_de_vida, color = pais) ) +
+  geom_point(size = 3) + geom_line(size = 1) 
+```
+
+&lt;img src="Clase_6_files/figure-html/fig_legend1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+```r
+ggplot(data = base_vecinos, 
+       aes(x = anio, y = esperanza_de_vida, color = pais) ) +
+  geom_point(size = 3) + geom_line(size = 1) +
+* theme(legend.position = "bottom",
+*       legend.title = element_blank(),
+*       legend.background = element_rect(fill="lightgrey") )
+```
+
+&lt;img src="Clase_6_files/figure-html/fig_legend2-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+names: temas
+## Temas
+
+En la librería `ggplot` existe una variedad de temas precargados que permiten modificar de manera rápida cómo se ve el fondo de un gráfico. Estos son:
+
+  - **`theme_grey()`**/**`theme_gray()`** - Por defecto
+  - **`theme_bw()`**
+  - **`theme_linedraw()`**
+  - **`theme_light()`**
+  - **`theme_dark()`**
+  - **`theme_minimal()`**
+  - **`theme_classic()`**
+  - **`theme_void()`**
+  - **`theme_test()`**
+
+A continuación, se usarán algunos de estos temas para evidenciar las diferencias entre ellos:
+
+
+---
+
+
+.pull-left[
+
+```r
+ggplot(data = mtautos,
+       aes(peso, millas)) +
+  geom_point(color = "#79bcff",
+             size = 5) + 
+* theme_light()
+```
+
+![](Clase_6_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+]
+
+
+.pull-right[
+
+```r
+ggplot(data = mtautos,
+       aes(peso, millas)) +
+  geom_point(color = "#79bcff",
+             size = 5) +  
+* theme_dark()
+```
+
+![](Clase_6_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+]
+
+---
+
+
+.pull-left[
+
+```r
+ggplot(data = mtautos,
+       aes(peso, millas)) +
+  geom_point(color = "#79bcff",
+             size = 5) + 
+* theme_bw()
+```
+
+![](Clase_6_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+]
+
+
+.pull-right[
+
+```r
+ggplot(data = mtautos,
+       aes(peso, millas)) +
+  geom_point(color = "#79bcff",
+             size = 5) +  
+* theme_classic()
+```
+
+![](Clase_6_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+]
+
+
+
+
+
+---
+name: color2
+## Personalización de colores 
+
+Existen diferentes formas de personalizar los colores de un gráfico de `ggplot2`, esto depende si el gráfico está coloreado mediante una variable continua o discreta:
+
+**Variable Discreta**
+
+* **`scale_fill_manual()`**: Permite ingresar colores de manera manual a colores del argumento `fill` de un gráfico. 
+
+* **`scale_color_manual()`**: Permite ingresar colores de manera manual a colores del argumento `color` de un gráfico. 
+
+**Variable Continua** 
+
+* **`scale_&lt;*&gt;_gradient()`**: Gradiente secuencial de 2 colores.
+
+* **`scale_&lt;*&gt;_gradientn()`**: Gradiente entre n colores.
+
+En este caso `&lt;*&gt;` puede ser tanto `color` como `fill`, dependiendo del tipo de elemento visual que se quiera personalizar.
+
+A continuación se presentará un ejemplo de cada una de estas funciones:
+
+
+---
+
+
+
+```r
+ggplot(data=mtautos, aes(x=peso, y=millas, col=factor(cilindros) )) +
+  geom_point(size = 8) + 
+* scale_color_manual(values=c("#c5c5ff","#ffc5c5","#c5ffc5"))
+```
+
+&lt;img src="Clase_6_files/figure-html/fig_scm-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+```r
+ggplot(data=mtautos, aes(x = peso, y = millas )) +
+  geom_boxplot(aes(fill = factor(cilindros) )) + 
+* scale_fill_manual(values=c("#d9ff52","#52d9ff","#ff52d9"))
+```
+
+&lt;img src="Clase_6_files/figure-html/fig_sfm-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+```r
+ggplot(data = base_vecinos, 
+       aes(x = esperanza_de_vida, y = pib_per_capita)) +
+  geom_point(aes(color = poblacion), size = 5) +
+* scale_color_gradient(low = "blue", high = "red")
+```
+
+&lt;img src="Clase_6_files/figure-html/fig_colorpoint3-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+```r
+ggplot(data = base_vecinos, 
+       aes(x = esperanza_de_vida, y = pib_per_capita)) +
+  geom_point(aes(color = poblacion), size = 5) +
+* scale_color_gradientn(colors = c("#ea5d5d","#5dea5d","#5d5dea"))
+```
+
+&lt;img src="Clase_6_files/figure-html/fig_colorpoint4-1.png" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+.large[**Librería `RColorBrewer`**]
+
+
+.pull-left[
+&lt;img src="media/rcolorbrewer.png"&gt;
+]
+
+.pull-right[
+
+La librería `RColorBrewer` contiene un gran número de paletas de colores para los gráficos de R y `ggplot2`. Las paletas de colores se definen con el argumento `palette` dentro de los comandos `scale_color_brewer()` o `scale_fill_brewer()`.
+
+
+```r
+install.packages("RColorBrewer")
+library(RColorBrewer)
+```
+
+
+
+En las siguientes slides se ejemplificará el uso de estas paletas de colores. 
+]
+
+---
+
+
+```r
+ggplot(data=paises, 
+       aes(x = esperanza_de_vida, 
+           y = pib_per_capita, color = continente))+
+  geom_point(size = 5) + 
+* scale_color_brewer(palette="Dark2")
+```
+
+&lt;img src="Clase_6_files/figure-html/fig_brewer1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+name: paneles
+class: inverse, middle
+# Paneles gráficos
+
+---
+name: facet
+##  Comandos `facet_wrap()` y `facet_grid()`
+
+Los comandos `facet_wrap()` y `facet_grid()` permiten separar un gráfico en gráficos relacionados en un mismo panel. Esto ayuda de sobre manera cuando se tiene una agrupación en un gráfico y se desea analizar cada grupo por separado. En las siguientes slidan se usarán los siguientes gráficos para ejemplificar estas funciones:
+
+.pull-left[
+![](Clase_6_files/figure-html/fig-wp-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+![](Clase_6_files/figure-html/fig-wl-1.png)&lt;!-- --&gt;
+
+]
+
+
+
+---
+
+
+```r
+ggplot(data=paises, 
+       aes(x = esperanza_de_vida, 
+           y = pib_per_capita, color = continente))+
+  geom_point(size = 2, alpha = 0.7) + 
+* facet_grid(~continente)
+```
+
+&lt;img src="Clase_6_files/figure-html/fig-wp2-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+
+
+```r
+ggplot(data = base_vecinos, aes(x = anio,y = esperanza_de_vida,
+                                color = pais) ) +
+  geom_point(size = 3) + geom_line(size = 1) +
+* facet_wrap(~ pais)
+```
+
+&lt;img src="Clase_6_files/figure-html/fig-wl2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+## Matriz de gráficos 
+
+
+```r
+g1 = ggplot(data = paises, aes(x = esperanza_de_vida)) + 
+  geom_histogram(fill = "lightblue") +
+  labs(x = element_blank(), y = element_blank())  
+
+g2 = ggplot(data = paises, aes(x = esperanza_de_vida)) + 
+  geom_boxplot(fill = "lightblue") + 
+  labs(x=element_blank()) 
+
+gridExtra::grid.arrange(g1,g2, nrow=2)
+```
+
+
+El comando **`grid.arrange()`** de la librería `gridExtra` permite colocar en la misma ventana múltiples gráficos de `ggplot2`, en una especie de matriz.  
+
+.center[
+
+```r
+grid.extra(plot1, plot2,...)
+```
+]
+
+Esta función recibe un listado de elementos visuales seguidos del argumento `ncol` o `nrow`, los cuales nos permiten indicar cuál será el número de columnas o filas, respectivamente, de la matriz de gráficos.
+
+---
+&lt;br&gt;
+
+.center[
+&lt;img src="Clase_6_files/figure-html/fig_final-out-1.png" width="75%" /&gt;
+]
+---
+name: otros
+class: inverse, middle
+# Otros gráficos relacionados
+
+---
+
+# Gráficos de correlación
+
+La función `ggcorrplot()` de la librería `ggcorrplot` grafica un correlograma a partir de una matriz de correlación de un set de datos. Los correlogramas son la mejor manera de analizar una matriz de correlación, dada su fácil interpretabilidad.
+
+.pull-left[
+
+```r
+library(ggcorrplot)
+cor_autos = cor(mtautos)
+ggcorrplot(cor_autos)
+```
+
+Algunos argumentos de la función:
+
+* **`method`**: figura en cada cuadro (`square` o `circle`).
+
+* **`type`**: tipo de pintado (`full`, `lower` o `upper`).
+
+* **`colors`**: vector de 3 colores para representar la correlación.
+
+* entre otros.
+
+
+]
+
+.pull-right[
+&lt;img src="Clase_6_files/figure-html/fig_corr-out-1.png" width="100%" /&gt;
+
+]
+---
+## Matriz de dispersión
+
+La función `ggpairs()` de la librería `GGally` realiza una matriz de gráficos de un conjunto de datos dados.
+.center[
+&lt;img src="Clase_6_files/figure-html/fig_ggpairs-1.png" width="60%" /&gt;
+]
+---
+name: taller
+class: inverse, middle
+# Taller práctico
+
+---
+class: inverse
+# Taller práctico 1
+
+Retomando las datos de anuncios de viviendas de la Región Metropolitana, **viviendasRM.csv**, construya los siguientes gráficos:
+
+1. Un histograma que permita visualizar la distribución del valor de las viviendas en UF.
+
+2. Un boxplot para visualizar la distribución del valor de las viviendas en UF según la cantidad de habitaciones.
+
+3. Un gráfico de dispersión (o puntos) para observar la relación entre el valor de las viviendas en UF y su superficie construida en `\(m^2\)`. Ajuste a escala logarítmica si es necesario o elimine los valores atípicos.
+
+4. Realice un análisis de correlación entre todas las variables numéricas disponibles.
+
+5. Realice un análisis de dispersión entre todas las variables numéricas disponibles.
+
+---
+class: inverse
+# Taller práctico 2
+
+Usando los datos de países del package **datos** replique el siguiente gráfico.
+
+.center[
+&lt;img src="Clase_6_files/figure-html/unnamed-chunk-12-1.png" width="60%" /&gt;
+]
+
+---
+name: adios
+class: inverse, middle
+# Referencias y material complementario
+
+---
+
+# Referencias y material complementario
+
+
+
+[**Link:** Funciones `facet_wrap()` y `facet_grid()` ](http://zevross.com/blog/2019/04/02/easy-multi-panel-plots-in-r-using-facet_wrap-and-facet_grid-from-ggplot2/)
+
+
+.large[**Colores y personalización**]
+
+* [**Link:** Funciones base `ggplot2`](http://www.sthda.com/english/wiki/ggplot2-colors-how-to-change-colors-automatically-and-manually)
+
+* [**Link:** Paletas de colores `jcolors`](https://jaredhuling.org/jcolors/)
+
+* [**Link:** Funciones para distintas escalas de colores](https://ggplot2.tidyverse.org/reference/scale_brewer.html)
+
+
+.large[**Añadir lineas, segmentos, distribuciones**]
+
+* [**Link:** Líneas rectas, horizontales, verticales.](http://www.sthda.com/english/wiki/ggplot2-add-straight-lines-to-a-plot-horizontal-vertical-and-regression-lines)
+
+* [**Link:** Líneas distribuciones.](https://stackoverflow.com/questions/5688082/overlay-histogram-with-density-curve)
+
+---
+class: inverse, center, middle
+
+
+# ¡Gracias!
+&lt;br&gt;
+&lt;br&gt;
+
+Diego Muñoz
+&lt;br&gt; 
+[**dimunoz1@uc.cl**](dimunoz1@uc.cl) 
+
+&lt;br&gt; 
+&lt;br&gt; 
+Felipe Moya
+&lt;br&gt; 
+[**felipe.moya@uc.cl**](felipe.moya@uc.cl)
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "4:3"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
