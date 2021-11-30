@@ -66,7 +66,7 @@ paises %>%
 paises %>% 
   ggplot(aes(x = esperanza_de_vida, y = pib_per_capita)) +
   geom_point(aes(color = continente, size = poblacion),
-             alpha = .4)
+             alpha = .4) 
 
 
 
@@ -97,4 +97,127 @@ paises %>%
 # 
 # paises %>% 
 #   filter(pais %in% c("Chile","Perú","Argentina","Bolivia"))
+
+paises %>% 
+  filter(pais %in% c("Chile","Perú","Argentina","Bolivia")) %>% 
+  ggplot(aes(x = anio,y = esperanza_de_vida,
+             color = pais) ) +
+  geom_point(size = 3) + geom_line(size = 1) +
+  facet_grid(pais ~ continente)
+
+
+# Colores ----
+
+ggplot(data=mtautos, aes(x=peso, y=millas, col=factor(cilindros) )) +
+  geom_point(size = 5) +
+  scale_color_manual(values=c("#00E9FC","#fdd5c5","#c5ffc5"),"Cilindros")
+
+
+# Paletas de colores
+
+install.packages("RColorBrewer")
+library(RColorBrewer)
+
+ggplot(data=paises, 
+       aes(x = esperanza_de_vida, 
+           y = pib_per_capita, color = continente))+
+  geom_point(size = 2) + 
+  scale_color_brewer(palette="Dark2")
+
+# Paneles gráficos ----
+
+ggplot(data=paises, 
+       aes(x = esperanza_de_vida, 
+           y = pib_per_capita, color = continente))+
+  geom_point(size = 2, alpha = 0.7) +
+  facet_grid(~continente)
+
+paises %>% 
+  filter(pais %in% c("Chile","Perú","Argentina","Bolivia")) %>% 
+  ggplot(aes(x = anio,y = esperanza_de_vida,
+             color = pais) ) +
+  geom_point(size = 3) + geom_line(size = 1) +
+  facet_wrap( ~ pais + continente)
+
+
+install.packages("gridExtra")
+library(gridExtra)
+
+g1 <- ggplot(data = paises, aes(x = esperanza_de_vida)) + 
+  geom_histogram(fill = "lightblue") +
+  labs(x = element_blank(), y = element_blank(), title = "Grafico 1")
+g2 <- ggplot(data = paises, aes(x = esperanza_de_vida)) + 
+  geom_boxplot(fill = "lightblue") + 
+  labs(x=element_blank(), title = "Grafico 2") 
+
+
+gridExtra::grid.arrange(g1,g2, nrow=2, top = "Dashbord xxxxx")
+
+
+# Matriz de correlación ----
+
+library(ggcorrplot)
+cor_autos = cor(mtautos)
+ggcorrplot(cor_autos)
+
+
+mtautos %>% 
+  ggplot(aes(x = millas)) +
+  geom_density()
+
+mtautos %>% 
+  ggplot(aes(x = caballos)) +
+  geom_density()
+
+# Taller 1 ----
+
+df <- readxl::read_excel("viviendasRM.xlsx")
+
+## Pregunta 1 ----
+df %>% 
+  ggplot(aes(x = Valor_UF)) +
+  geom_histogram(color = "darkcyan", fill = "blue")
+
+## Pregunta 2 -----
+
+df$`N Habitaciones` %>% str()
+
+
+df %>% 
+  filter(`N Habitaciones` >= 15)
+
+df %>% 
+  ggplot(aes(y = Valor_UF, fill = factor(`N Habitaciones`))) +
+  geom_boxplot()
+
+# Pregunta 3 ----
+df$`Superficie Construida M2` %>% str()
+
+df %>% 
+  mutate(`Superficie Construida M2` = as.numeric(`Superficie Construida M2`)) %>% 
+  select(Valor_UF,`Superficie Construida M2`) %>% 
+  na.omit() %>% 
+  filter(`Superficie Construida M2` < 200000) %>% 
+  ggplot(aes(x = Valor_UF, y = `Superficie Construida M2`)) +
+  geom_point()
+  # scale_y_log10()
+  
+
+# Pregunta 4 ----
+
+df %>% glimpse()
+
+df %>% 
+  select_if(is.numeric) %>% 
+  na.omit() %>% 
+  cor() %>% 
+  ggcorrplot()
+  # corrplot::corrplot()
+
+# Pregunta 5 ----
+
+df %>% 
+  select_if(is.numeric) %>% 
+  na.omit() %>% 
+  GGally::ggpairs()
 
