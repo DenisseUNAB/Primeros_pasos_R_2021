@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Curso Primeros Pasos en R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Data Science UC" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/rladies-fonts.css" rel="stylesheet" />
+    <link href="libs/tabwid-1.0.0/tabwid.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: left, bottom
+background-image: url(media/ds6.jpg)
+background-size: cover
+
+.left[&lt;img src="media/logo.png" style="width: 40%" /&gt;]
+
+&lt;br&gt;
+&lt;br&gt;
+
+
+# **Curso Primeros Pasos en R**
+
+----
+## Clase 7: Análisis de datos usando `R`
+### Data Science UC
+#### Pontificia Universidad Católica de Chile
+###### Noviembre 2021
+&lt;br&gt;
+&lt;br&gt;
+
+----
+---
+class: left, middle
+
+# Clase 7: Análisis de datos usando `R`
+
+----
+.pull-left[
+.left[
+]
+
+* [**Introducción**](#intro)
+
+* [**Algunos funciones estadísticas con `R Base`**](#tipos)
+
+* [**Resumen de datos con `dplyr`**](#custom)
+
+] 
+
+.pull-right[
+.left[
+
+]
+
+* [**Tablas de frecuencia**](#taller)
+
+* [**Análisis de correlación**](#taller)
+
+* [**Taller práctico 1**](#taller)
+
+* [**Taller práctico 2**](#taller)
+
+
+] 
+
+---
+name: intro
+class: inverse, middle
+# Introducción
+
+---
+# Conceptos básicos
+
+
+.pull-left[
+**`Estadística descriptiva`**:
+
+Está formada por los métodos gráficos y numéricos que se utilizan para recolectar, resumir y procesar los datos muestrales.
+
+]
+.pull-right[
+
+**`Estadística inferencial`**:
+
+A partir de la descripción de datos muestrales y modelos matemáticos: estima, predice y deduce propiedades de la población, para fenómenos que tienen cierto grado de incertidumbre.
+
+]
+
+.center[ 
+&lt;img src="media/muestra.png" width="600px" height = "340px"/&gt;
+]
+
+---
+
+class: inverse, middle
+# Funciones estadísticas con `R Base`
+
+---
+
+# Algunas funciones estadísticas
+
+
+.center[ 
+
+.center[.large[**Funciones R base**]]
+
+| Función | Descripción | Característica |
+| :------ | :----: | :------: |
+| mean(x) | Media | Medida de tendencia central |
+| median(x)| Mediana | Medida de tendencia central|
+| mode(x) | Moda | Medida de tendencia central |
+| var(x)| Varianza | Medida de dispersión|
+| sd(x) | Desviación estándar | Medida de dispersión |
+| cv(x)| Coeficiente de variación | Medida de dispersión |
+| min(x)| Mínimo | Medida de dispersión |
+| max(x)| Máximo | Medida de dispersión |
+| IQR(x) | Rango intercuartil | Medida de dispersión |
+| range(x) | Rango | Medida de dispersión |
+| quantile(x) | Cuartiles | Medida de posición |
+]
+
+---
+
+# Ejemplos aplicados
+
+
+```r
+library(tidyverse)
+
+IMACEC &lt;- readxl::read_excel(path = "Datos/Data_IMACEC.xlsx")
+IMACEC$Year &lt;- as.character(IMACEC$Year)
+
+IMACEC %&gt;% janitor::clean_names()
+```
+
+
+
+&lt;template id="b7351bfd-2793-48fb-8862-51a3fd8eb747"&gt;&lt;style&gt;
+.tabwid table{
+  border-spacing:0px !important;
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+&lt;/style&gt;&lt;div class="tabwid"&gt;&lt;style&gt;.cl-01ee7ba4{}.cl-01e83a78{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-01e83a79{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-01e86034{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-01e86035{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-01e8af80{width:95.1pt;background-color:rgba(239, 239, 239, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8af81{width:69.5pt;background-color:rgba(239, 239, 239, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8af82{width:113.5pt;background-color:rgba(239, 239, 239, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8af83{width:66.4pt;background-color:rgba(239, 239, 239, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8af84{width:75pt;background-color:rgba(239, 239, 239, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8af85{width:84.1pt;background-color:rgba(239, 239, 239, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8af86{width:51.1pt;background-color:rgba(239, 239, 239, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8af87{width:45pt;background-color:rgba(239, 239, 239, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8af88{width:66.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8af89{width:45pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8af8a{width:51.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8d74e{width:75pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8d74f{width:95.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8d750{width:69.5pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8d751{width:84.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8d752{width:113.5pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8d753{width:66.4pt;background-color:rgba(207, 207, 207, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8d754{width:45pt;background-color:rgba(207, 207, 207, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8d755{width:69.5pt;background-color:rgba(207, 207, 207, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8d756{width:95.1pt;background-color:rgba(207, 207, 207, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8d757{width:51.1pt;background-color:rgba(207, 207, 207, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8d758{width:75pt;background-color:rgba(207, 207, 207, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8fc10{width:84.1pt;background-color:rgba(207, 207, 207, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01e8fc11{width:113.5pt;background-color:rgba(207, 207, 207, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-01ee7ba4'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-01e8d754"&gt;&lt;p class="cl-01e86034"&gt;&lt;span class="cl-01e83a78"&gt;year&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d757"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a78"&gt;month&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d753"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a78"&gt;imacec&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d756"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a78"&gt;imacec_minero&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8fc11"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a78"&gt;imacec_no_minero&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d758"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a78"&gt;pib_minero&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d755"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a78"&gt;pib&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8fc10"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a78"&gt;precio_cobre&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-01e8af87"&gt;&lt;p class="cl-01e86034"&gt;&lt;span class="cl-01e83a79"&gt;2003&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af86"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;12&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af83"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;67.76079&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af80"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;98.08392&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af82"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;63.36657&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af84"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;14,404.27&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af81"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;86,942.76&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af85"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;99.85&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-01e8af89"&gt;&lt;p class="cl-01e86034"&gt;&lt;span class="cl-01e83a79"&gt;2004&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af8a"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;1&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af88"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;63.70224&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d74f"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;90.06012&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d752"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;59.73470&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d74e"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;14,448.68&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d750"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;87,492.83&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d751"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;109.93&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-01e8af87"&gt;&lt;p class="cl-01e86034"&gt;&lt;span class="cl-01e83a79"&gt;2004&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af86"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;2&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af83"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;61.32155&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af80"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;83.76556&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af82"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;57.66408&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af84"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;14,490.98&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af81"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;88,040.46&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af85"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;125.17&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-01e8af89"&gt;&lt;p class="cl-01e86034"&gt;&lt;span class="cl-01e83a79"&gt;2004&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af8a"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;3&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af88"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;70.11227&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d74f"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;92.09932&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d752"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;66.13346&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d74e"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;14,531.34&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d750"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;88,585.86&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d751"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;136.54&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-01e8af87"&gt;&lt;p class="cl-01e86034"&gt;&lt;span class="cl-01e83a79"&gt;2004&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af86"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;4&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af83"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;67.97267&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af80"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;93.53549&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af82"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;63.88069&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af84"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;14,568.78&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af81"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;89,127.89&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af85"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;133.75&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-01e8af89"&gt;&lt;p class="cl-01e86034"&gt;&lt;span class="cl-01e83a79"&gt;2004&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af8a"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;5&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af88"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;67.89010&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d74f"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;98.03560&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d752"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;63.54821&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d74e"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;14,602.32&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d750"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;89,665.41&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d751"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;123.99&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-01e8af87"&gt;&lt;p class="cl-01e86034"&gt;&lt;span class="cl-01e83a79"&gt;2004&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af86"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;6&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af83"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;66.47407&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af80"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;99.20470&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af82"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;62.04521&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af84"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;14,630.98&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af81"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;90,197.30&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af85"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;121.60&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-01e8af89"&gt;&lt;p class="cl-01e86034"&gt;&lt;span class="cl-01e83a79"&gt;2004&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af8a"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;7&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af88"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;65.67273&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d74f"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;97.16145&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d752"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;61.34407&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d74e"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;14,653.76&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d750"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;90,722.41&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8d751"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;127.39&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-01e8af87"&gt;&lt;p class="cl-01e86034"&gt;&lt;span class="cl-01e83a79"&gt;2004&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af86"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;8&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af83"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;66.65976&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af80"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;98.74424&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af82"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;62.25928&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af84"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;14,669.70&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af81"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;91,239.61&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-01e8af85"&gt;&lt;p class="cl-01e86035"&gt;&lt;span class="cl-01e83a79"&gt;129.10&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/template&gt;
+&lt;div class="flextable-shadow-host" id="357ec77b-2229-450c-b543-c208331881af"&gt;&lt;/div&gt;
+&lt;script&gt;
+var dest = document.getElementById("357ec77b-2229-450c-b543-c208331881af");
+var template = document.getElementById("b7351bfd-2793-48fb-8862-51a3fd8eb747");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+&lt;/script&gt;
+
+---
+
+#### Media
+
+
+```r
+mean(IMACEC$precio_cobre)
+```
+
+```
+## [1] 282.0961
+```
+
+#### Mediana
+
+
+```r
+median(IMACEC$precio_cobre)
+```
+
+```
+## [1] 292.14
+```
+
+#### Moda
+
+
+```r
+modeest::mlv(IMACEC$precio_cobre)
+```
+
+```
+## [1] 299.4428
+```
+
+#### Varianza
+
+
+
+```r
+var(IMACEC$precio_cobre)
+```
+
+```
+## [1] 5903.072
+```
+---
+
+#### Desviación estándar
+
+
+```r
+sd(IMACEC$precio_cobre)
+```
+
+```
+## [1] 76.83145
+```
+
+#### Coeficiente de variación
+
+
+```r
+sd(IMACEC$precio_cobre)/mean(IMACEC$precio_cobre) 
+```
+
+```
+## [1] 0.2723591
+```
+
+#### Mínimo
+
+
+```r
+min(IMACEC$precio_cobre)
+```
+
+```
+## [1] 99.85
+```
+
+#### Máximo
+
+
+```r
+max(IMACEC$precio_cobre)
+```
+
+```
+## [1] 449.17
+```
+
+---
+#### Rango intercuartil
+
+
+```r
+IQR(IMACEC$precio_cobre)
+```
+
+```
+## [1] 104.1825
+```
+
+#### Rango
+
+
+```r
+range(IMACEC$precio_cobre)
+```
+
+```
+## [1]  99.85 449.17
+```
+
+#### Cuartiles
+
+
+```r
+quantile(IMACEC$precio_cobre, probs = c(0.25, 0.50, 0.75))
+```
+
+```
+##      25%      50%      75% 
+## 233.0925 292.1400 337.2750
+```
+
+---
+class: inverse, middle
+# Tablas de frecuencia
+
+---
+
+class: 
+# Tablas de frecuencia
+
+- `table(x)` entrega una tabla de frecuencia simple.
+
+
+```r
+datos &lt;- datos::paises
+table(datos$continente)
+```
+
+
+- `prop.table(table(x))` transforma la tabla anterior en proporciones.
+
+
+```r
+datos &lt;- datos::paises
+prop.table(table(datos$continente))
+```
+
+- `table(x, y)` permite usar más variables para tablas de dos o más entradas (tablas de contingencia).
+
+
+```r
+datos &lt;- datos::paises %&gt;% 
+  dplyr::mutate(BajoMedia = case_when(esperanza_de_vida &lt;= mean(esperanza_de_vida) ~ "Bajo Media", TRUE ~ "Sobre Media"))
+
+table(datos$continente, datos$BajoMedia)
+```
+
+---
+
+class: 
+# Tablas de frecuencia de doble entrada
+
+En el caso de una tabla de doble entrada, se tiene el argumento `margin` cuando se quiere representar en porcentajes. Esto permite realizar los siguientes análisis:
+
+- `prop.table(table(x, y))`:  Representa el porcentaje conjunto de obtener un elemento con la combinación deseada.
+
+- `prop.table(table(x, y), margin = 1)`:  Representa el porcentaje de obtener `y` dado que se tiene `x`.
+
+- `prop.table(table(x, y), margin = 2)`:  Representa el porcentaje de obtener `x` dado que se tiene `y`
+
+---
+
+
+
+
+```r
+prop.table(table(datos$continente, datos$BajoMedia))
+```
+
+```
+##           
+##             Bajo Media Sobre Media
+##   África   0.319248826 0.046948357
+##   Américas 0.048122066 0.127934272
+##   Asia     0.100938967 0.131455399
+##   Europa   0.006455399 0.204812207
+##   Oceanía  0.000000000 0.014084507
+```
+
+**Aproximadamente, el 32% de los datos son del continente África y tienen una esperanza de vida bajo la media.**
+
+
+```r
+prop.table(table(datos$continente, datos$BajoMedia), margin = 1)
+```
+
+```
+##           
+##            Bajo Media Sobre Media
+##   África   0.87179487  0.12820513
+##   Américas 0.27333333  0.72666667
+##   Asia     0.43434343  0.56565657
+##   Europa   0.03055556  0.96944444
+##   Oceanía  0.00000000  1.00000000
+```
+
+**Para los datos que provienen de África, aproximadamente el 87% de estos tienen esperanza de vida bajo la media**
+
+---
+
+
+```r
+prop.table(table(datos$continente, datos$BajoMedia), margin = 2)
+```
+
+```
+##           
+##            Bajo Media Sobre Media
+##   África   0.67243511  0.08938547
+##   Américas 0.10135970  0.24357542
+##   Asia     0.21260816  0.25027933
+##   Europa   0.01359703  0.38994413
+##   Oceanía  0.00000000  0.02681564
+```
+
+**De los datos que tiene una esperanza de vida bajo la media, aproximadamente el 67% provienen de África**
+
+---
+
+class: inverse, middle
+# Análisis de correlación
+
+---
+
+class: 
+# Análisis de correlación
+
+Para calcular la correlación entre dos variables numéricas, se utiliza el comando `cor(x, y)`. Además, se puede especificar el tipo de correlación con el argumento `method`.
+
+
+```r
+flores &lt;- datos::flores
+cor(flores$Largo.Sepalo, flores$Ancho.Petalo, method = "pearson")
+```
+
+```
+## [1] 0.8179411
+```
+
+Además, se puede puede ingresar una base de datos con variables numéricas, lo que retorna una matriz de correlaciones.
+
+
+```r
+flores &lt;- datos::flores %&gt;% 
+  dplyr::select_if(is.numeric)
+
+cor(flores, method = "pearson")
+```
+
+```
+##              Largo.Sepalo Ancho.Sepalo Largo.Petalo Ancho.Petalo
+## Largo.Sepalo    1.0000000   -0.1175698    0.8717538    0.8179411
+## Ancho.Sepalo   -0.1175698    1.0000000   -0.4284401   -0.3661259
+## Largo.Petalo    0.8717538   -0.4284401    1.0000000    0.9628654
+## Ancho.Petalo    0.8179411   -0.3661259    0.9628654    1.0000000
+```
+
+---
+
+En la clase anterior, se vio que una matriz de correlación puede ser representada gráficamente con la librería `ggcorrplot`.
+
+
+```r
+ggcorrplot::ggcorrplot(cor(flores, method = "pearson"),
+                       method = "circle",
+                       type = "upper")
+```
+
+&lt;img src="Clase_7_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+class: inverse, middle
+# Resumen de datos con `dplyr`
+
+---
+
+
+```r
+IMACEC %&gt;% 
+  dplyr::filter(year &gt;= 2015) %&gt;% 
+  dplyr::group_by(year) %&gt;% 
+  dplyr::summarise(media= mean(precio_cobre, na.rm = TRUE),
+                   mediana = median(precio_cobre, na.rm = TRUE),
+                   sd = sd(precio_cobre, na.rm = TRUE),
+                   Q1 = quantile(precio_cobre, probs = 0.25),
+                   Q3 = quantile(precio_cobre, probs = 0.75),
+                   min = quantile(precio_cobre, na.rm = TRUE),
+                   max = quantile(precio_cobre, na.rm = TRUE),
+                   asimetria = moments::skewness(precio_cobre, na.rm = TRUE),
+                   curtosis = moments::kurtosis(precio_cobre, na.rm = TRUE)) 
+```
+
+```
+## # A tibble: 30 x 10
+## # Groups:   year [6]
+##    year  media mediana    sd    Q1    Q3   min   max asimetria curtosis
+##    &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+##  1 2015   251.    255.  25.0  236.  268.  208.  208.    -0.261     2.01
+##  2 2015   251.    255.  25.0  236.  268.  236.  236.    -0.261     2.01
+##  3 2015   251.    255.  25.0  236.  268.  255.  255.    -0.261     2.01
+##  4 2015   251.    255.  25.0  236.  268.  268.  268.    -0.261     2.01
+##  5 2015   251.    255.  25.0  236.  268.  289.  289.    -0.261     2.01
+##  6 2016   220.    214.  16.2  211.  221.  201.  201.     1.33      3.70
+##  7 2016   220.    214.  16.2  211.  221.  211.  211.     1.33      3.70
+##  8 2016   220.    214.  16.2  211.  221.  214.  214.     1.33      3.70
+##  9 2016   220.    214.  16.2  211.  221.  221.  221.     1.33      3.70
+## 10 2016   220.    214.  16.2  211.  221.  257.  257.     1.33      3.70
+## # ... with 20 more rows
+```
+
+
+
+---
+
+name: taller
+class: inverse, middle
+# Taller práctico 1
+
+---
+class: 
+# Taller práctico 1
+
+Usted está trabajando en un banco, que pretende **realizar un estudio para calcular el riesgo de crédito mediante distintos modelos estadísticos**. Sin embargo, previo a la formulación del diseño y la metodología, le solicitan realizar un **`análisis exploratorio`** de la siguiente base de datos:
+
+
+```r
+data &lt;- readxl::read_xlsx(path = "Datos/base_bancos.xlsx", 
+                          sheet = 1, col_names = TRUE) 
+head(data, 7)
+```
+
+```
+## # A tibble: 7 x 11
+##    Edad Sucursal Ingreso_mensual Bienes Tarjetas Credito Solicitud  Sexo
+##   &lt;dbl&gt; &lt;chr&gt;              &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;
+## 1    48 C                1009411 NO            0       0         1     1
+## 2    40 B                1404737 SI            1       1         0     0
+## 3    51 C                 498745 SI            1       0         0     1
+## 4    23 B                1309255 NO            1       0         0     1
+## 5    57 A                1500255 NO            0       0         0     1
+## 6    57 B                1070490 NO            1       0         1     1
+## 7    22 A                1564674 NO            1       0         1     0
+## # ... with 3 more variables: Profesion &lt;chr&gt;, Comuna &lt;chr&gt;, Hijos &lt;dbl&gt;
+```
+
+---
+# Taller práctico 1
+
+1. Leer **`base_bancos.xlsx`** y realizar análisis exploratorio del conjunto de datos (naturaleza de variables, clase, nombres de columnas, resumen global, etc).
+
+2. ¿Cuántos **`clientes son profesionales`**, según comuna?.
+
+3. Agrupar **`clientes bancarios`** a partir de rangos etareos y ver quiénes **`solicitan crédito`**.
+
+4. ¿Cuántos **`hijos`** tienen los clientes que **`solicitan crédito`**?
+
+5. ¿Cuál es el **`ingreso promedio mensual`** por comuna?.
+
+6. ¿Cuál es la **`edad promedio`** de hombres y mujeres que **`solicitan crédito`**?
+
+---
+# Taller práctico 1
+
+7. ¿Cuál es la mediana de **`ingreso mensual`** en **`Lo Prado`**?
+
+8. ¿Cómo se **`agrupan los ingresos`** de todos los clientes?
+
+9. ¿Entre qué **`rangos`** se encuentra el ingreso mensual de **`San Ramón`**?
+
+10. ¿Cuál es el **`rango intercuartil`** de la edad de clientes en la comuna de **`Providencia`**?
+
+11. ¿Hay **`ingresos mensuales atípicos`** en la comuna de **`La Cisterna`**?
+
+12. ¿Cuál es la **`forma de distribución`** del ingreso?
+
+13. ¿Cuál es el **`ingreso mensual`** de cada cliente, según **`Comuna`** (tomando como referencia forma, distribución, posición y dispersión?
+
+---
+
+name: taller
+class: inverse, middle
+# Taller práctico 2
+
+---
+class: 
+# Taller práctico 2
+
+Usted ha sido contratado como consultor/a para **`ver si eventualmente el partido X inicia un estudio sobre los factores que inciden en la probabilidad de votación de X usuario de Y red social sobre una candidata a la Convención Constituyente`**. En una reunión de planificación se pretende determinar preliminarmente si es que a mayor cantidad de correos de campaña electoral (a pesar de costos fijos, variables y overhead) hay mayor cantidad de conversiones (usuario realiza clicks en los enlaces para conocer a la candidata).
+
+
+```r
+Mailings &lt;- c(96, 40, 104, 128, 164, 76, 72, 80, 84, 180, 44, 36)
+Conversiones &lt;- c(41, 41, 51, 53, 60, 61, 50, 28, 48, 70, 33, 30)
+tail(data.frame(Mailings, Conversiones), 5)
+```
+
+```
+##    Mailings Conversiones
+## 8        80           28
+## 9        84           48
+## 10      180           70
+## 11       44           33
+## 12       36           30
+```
+
+---
+name: adios
+class: inverse, middle
+# Referencias y material complementario
+
+---
+
+# Referencias y material complementario
+
+.large[**Aplicaciones en R**]
+
+* [**Link:** `R for Data Science`](https://r4ds.had.co.nz)
+
+* [**Link:** `R in a Nutshell`](https://www.guianaplants.stir.ac.uk/seminar/resources/R_in_a_Nutshell_Second_Edition.pdf)
+
+* [**Link:** `Introduction to Statistical Data With R`](https://www.arma.org.au/wp-content/uploads/2017/03/introduction-to-statistical-data-analysis-with-r.pdf)
+
+* [**Link:** `A Handbook of Statistical Analyses Using R`](http://www.pflaumnet.com/WorkDownloads/handbook%20for%20r%20starters.pdf)
+
+* [**Link:** `Basic Statistics Using R`](https://bookdown.org/mikemahoney218/LectureBook/basic-statistics-using-r.html)
+
+
+---
+class: inverse, center, middle
+
+# ¡Gracias!
+&lt;br&gt;
+&lt;br&gt;
+
+Diego Muñoz Ureta
+&lt;br&gt; 
+[**dimunoz1@uc.cl**](dimunoz1@uc.cl) 
+
+&lt;br&gt; 
+&lt;br&gt; 
+Felipe Moya
+&lt;br&gt; 
+[**felipe.moya@uc.cl**](felipe.moya@uc.cl) 
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "4:3"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
