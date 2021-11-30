@@ -1,9 +1,9 @@
-# Profesor Diego Mu??oz - dimunoz1@uc.cl
+# Profesor Diego Muñoz - dimunoz1@uc.cl
 # Ayudante Felipe Moya - felipe.moya@uc.cl
 
 # Clase 6
 # Repositorio GitHub: https://github.com/DiegoHoliwis/Primeros_pasos_R_2021
-# Presentaci??n: https://diegoholiwis.github.io/Primeros_pasos_R_2021/Clase_6.html
+# Presentación: https://diegoholiwis.github.io/Primeros_pasos_R_2021/Clase_6.html
 
 # getwd() 
 # setwd('Clase 6')
@@ -16,7 +16,7 @@ library(datos)
 paises %>% 
   ggplot(aes(x = esperanza_de_vida)) +
   geom_histogram() +
-  # ggtitle("Mi primer gr??fico")+
+  # ggtitle("Mi primer gráfico")+
   # xlab("Esperanza de vida") +
   # ylab("") +
   labs(title = "Mi primer gr??fico",
@@ -26,12 +26,12 @@ paises %>%
   coord_polar()
   
 
-# opci??n 1
+# opción 1
 ggplot(data = paises[paises$pais == "Chile",] , 
        aes(x = anio, y = esperanza_de_vida)) + 
   geom_line( color = "#E61400", size = 2)
 
-# opci??n 2
+# opción 2
 
 paises %>% 
   filter(pais == "Chile") %>% 
@@ -39,14 +39,14 @@ paises %>%
   geom_line(color = "#E61400", size = 2, alpha = .2)
 
 
-# Customizaci??n de los gr??ficos ----
+# Customización de los gráficos ----
 
 paises %>% 
   filter(pais == "Chile") %>% 
   ggplot(aes(x = anio, y = esperanza_de_vida)) +
   geom_line(color = "#E61400", size = 2, alpha = .2) +
-  # labs(title = "Mi segundo gr??fico",
-  #      x = "A??o",
+  # labs(title = "Mi segundo gráfico",
+  #      x = "Año",
   #      y = "Esperanza de vida")
   ggtitle("Mi segundo gr??fico")
 
@@ -58,7 +58,7 @@ paises %>%
   geom_point(size = 6, alpha = .4, col = "#0F55BB") +
   labs(title = "Esperanza de vida en Chile", 
        subtitle = "A??os 1952 a 2007",
-       x = "A??o",
+       x = "Año",
        y = "Esperanza de vida") 
 
 # plotly::ggplotly()
@@ -71,13 +71,13 @@ paises %>%
 
 
 paises %>% 
-  filter(pais %in% c("Chile","Per??","Argentina","Bolivia")) %>% 
+  filter(pais %in% c("Chile","Perú","Argentina","Bolivia")) %>% 
   ggplot(aes(x = esperanza_de_vida, y = pib_per_capita)) +
   geom_point(aes(color = poblacion))
 
 
 paises %>% 
-  filter(pais %in% c("Chile","Per??","Argentina","Bolivia")) %>% 
+  filter(pais %in% c("Chile","Perú","Argentina","Bolivia")) %>% 
   ggplot(aes(x = anio, y = esperanza_de_vida, color = pais) ) +
   geom_point(size = 3) +
   geom_line(size = 1) +
@@ -90,11 +90,11 @@ paises %>%
 
 # paises %>% 
 #   filter(pais == "Chile" |
-#            pais == "Per??"|
+#            pais == "Perú"|
 #            pais == "Argentina"|
 #            pais == "Bolivia")
 # 
 # 
 # paises %>% 
-#   filter(pais %in% c("Chile","Per??","Argentina","Bolivia"))
+#   filter(pais %in% c("Chile","Perú","Argentina","Bolivia"))
 
