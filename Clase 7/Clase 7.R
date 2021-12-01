@@ -62,3 +62,9 @@ IMACEC %>%
             curtosis  = moments::kurtosis(precio_cobre, na.rm = TRUE))
 
 #install.packages("moments")
+
+# Ejecutar todo el código hacia arriba
+# control + alt + b
+
+
+
