@@ -5,6 +5,49 @@ date: "02-12-2021"
 output: html_document
 ---
 
+<style>
+p {
+    font-size: 20px;
+    line-height: 24px;
+    margin: 0px 0px 12px 0px;
+}
+
+h1, h2, h3, h4, h5, h6, legend {
+    font-family: Arial, sans-serif;
+    font-weight: 600;
+    color: #04346c;
+}
+
+.header-panel  {
+    background-color: #04346c;
+}
+
+.nav-tabs{
+  background-color:#04346c9e;
+}
+
+.nav-tabs > li > a{
+  background-color: #04346c9e !important;
+    <!-- border: medium none; -->
+    <!-- border-radius: 0; -->
+    <!-- color:#fff; -->
+}
+
+.pages .nav-tabs>li.active>a {
+background-color: #04346c !important;
+}
+
+
+}
+
+</style>
+
+
+
+
+
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -21,10 +64,15 @@ summary(cars)
 
 ## Including Plots
 
-You can also embed plots, for example:
+
+
+
+You can also embed plots, for example:  `hola`
 
 ```{r pressure, echo=FALSE}
 plot(pressure)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
