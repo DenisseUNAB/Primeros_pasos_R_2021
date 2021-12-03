@@ -1,9 +1,20 @@
 ---
 title: "Mi primer informe"
 author: "Diego Muñoz"
-date: "02-12-2021"
-output: html_document
+date:  '`r Sys.Date()`'
+output: 
+  html_document:
+     toc: true
+     toc_depth: 3
 ---
+
+<script>
+   $(document).ready(function() {
+     $head = $('#header');
+     $head.prepend('<img src=\"https://www.reale.cl/v2/wp-content/themes/reale_010720/img/logoRealeColor.png\" style=\"float: left;width: 150px;\" />')
+   });
+</script>
+
 
 <style>
 p {
@@ -45,14 +56,15 @@ background-color: #04346c !important;
 
 
 
-
-
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+
+df <- readxl::read_excel("Data_IMACEC.xlsx")
 ```
 
-## R Markdown
+# R Markdown
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
@@ -74,5 +86,36 @@ plot(pressure)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+> Mi cita
+
+```{r}
+knitr::kable(mtcars[1:5, ], caption = 'Primeros registros de  mtcars')
+```
+
+```{r}
+DT::datatable(mtcars[1:5, ], caption = 'Primeros registros de  mtcars')
+```
+**Recomendación** Explorar el paquete [DT](https://rstudio.github.io/DT/)
+
+
+```{r eval=FALSE, echo=FALSE, warning=FALSE}
+DT::datatable(df)
+```
+
+* Hola
+* Adios
+  - Hola otra vez
+  - Adios otra vez
+
+El promedio de los carburadores de los vehículos es `r mean(mtcars$carb)`
+
+
+```{r}
+mtcars %>% 
+  ggplot(aes(x = mpg, y = wt))+
+  geom_point()
+```
 
 
